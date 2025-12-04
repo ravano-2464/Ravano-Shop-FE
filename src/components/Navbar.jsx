@@ -6,6 +6,7 @@ import useAuth from '../hooks/Auth/useAuth';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../hooks/Cart/useCart';
 import CartModal from './CartModal';
+import LogoutConfirmationModal from './LogoutConfirmationModal';
 
 const useStyles = createUseStyles({
   navbar: {
@@ -176,22 +177,29 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logoutUser } = useAuth();
-  const { toggleLanguage, language } = useLanguage();
+  const { toggleLanguage, language, t } = useLanguage();
   const { totalItems, cartItems, removeFromCart } = useCart();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
-  const handleLogout = () => {
+  const handleLogoutConfirm = () => {
     logoutUser();
+    setIsLogoutModalOpen(false);
     navigate('/login');
   };
 
+  const handleLogoutClick = () => {
+    setIsLogoutModalOpen(true);
+    if (isMobileOpen) setIsMobileOpen(false);
+  };
+
   const navItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Catalog', path: '/list-products' },
-    { label: 'Add Product', path: '/add-products' },
+    { label: t.nav.home, path: '/' },
+    { label: t.nav.catalog, path: '/list-products' },
+    { label: t.nav.add, path: '/add-products' },
   ];
 
   return (
@@ -218,7 +226,7 @@ const Navbar = () => {
             onClick={() => setIsCartOpen(true)}
           >
             <ShoppingCart size={18} />
-            <span>Cart</span>
+            <span>{t.nav.cart}</span>
             {totalItems > 0 && (
               <span className={classes.cartBadge}>{totalItems}</span>
             )}
@@ -227,7 +235,7 @@ const Navbar = () => {
           <button
             onClick={toggleLanguage}
             className={classes.langBtn}
-            title="Change Language"
+            title={t.nav.language}
           >
             {language === 'id' ? '🇮🇩' : '🇺🇸'}
           </button>
@@ -235,12 +243,14 @@ const Navbar = () => {
           <div className={classes.authSection}>
             {user ? (
               <>
-                <span className={classes.userBadge}>Hi, {user.name}</span>
+                <span className={classes.userBadge}>
+                  {t.nav.greeting}, {user.name}
+                </span>
                 <button
-                  onClick={handleLogout}
+                  onClick={handleLogoutClick}
                   className={`${classes.btn} ${classes.btnLogout}`}
                 >
-                  Logout
+                  {t.nav.logout}
                 </button>
               </>
             ) : (
@@ -248,7 +258,7 @@ const Navbar = () => {
                 to="/login"
                 className={`${classes.btn} ${classes.btnLogin}`}
               >
-                Sign In
+                {t.nav.login}
               </Link>
             )}
           </div>
@@ -267,6 +277,12 @@ const Navbar = () => {
         onClose={() => setIsCartOpen(false)}
         items={cartItems}
         onRemove={removeFromCart}
+      />
+
+      <LogoutConfirmationModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleLogoutConfirm}
       />
 
       {isMobileOpen && (
@@ -291,7 +307,9 @@ const Navbar = () => {
             style={{ justifyContent: 'center', width: '100%' }}
           >
             <ShoppingCart size={18} />
-            <span>Cart {totalItems > 0 ? `(${totalItems})` : ''}</span>
+            <span>
+              {t.nav.cart} {totalItems > 0 ? `(${totalItems})` : ''}
+            </span>
           </button>
 
           <div
@@ -302,7 +320,7 @@ const Navbar = () => {
             }}
           >
             <button onClick={toggleLanguage} className={classes.langBtn}>
-              Change Language {language === 'id' ? '🇮🇩' : '🇺🇸'}
+              {t.nav.language} {language === 'id' ? '🇮🇩' : '🇺🇸'}
             </button>
           </div>
 
@@ -316,13 +334,13 @@ const Navbar = () => {
                 className={classes.userBadge}
                 style={{ textAlign: 'center' }}
               >
-                Hi, {user.name}
+                {t.nav.greeting}, {user.name}
               </div>
               <button
-                onClick={handleLogout}
+                onClick={handleLogoutClick}
                 className={`${classes.btn} ${classes.btnLogout}`}
               >
-                Logout
+                {t.nav.logout}
               </button>
             </>
           ) : (
@@ -332,7 +350,7 @@ const Navbar = () => {
               onClick={() => setIsMobileOpen(false)}
               style={{ textAlign: 'center' }}
             >
-              Sign In
+              {t.nav.login}
             </Link>
           )}
         </div>
