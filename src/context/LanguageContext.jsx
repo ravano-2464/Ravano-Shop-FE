@@ -51,7 +51,7 @@ const translations = {
     list: {
       title: 'Product Catalog',
       subtitle: 'Manage your inventory efficiently',
-      addBtn: '+ Add New Product',
+      addBtn: 'Add New Product',
       search: 'Search products...',
       minPrice: 'Min Price',
       maxPrice: 'Max Price',
