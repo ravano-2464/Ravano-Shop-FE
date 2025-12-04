@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { createUseStyles } from 'react-jss';
 import { X, Trash2, ShoppingBag } from 'lucide-react';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import ReceiptModal from './ReceiptModal';
 
 const useStyles = createUseStyles({
   overlay: {
@@ -88,6 +91,17 @@ const useStyles = createUseStyles({
       backgroundColor: 'white',
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
     },
+  },
+  checkboxContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkbox: {
+    width: '20px',
+    height: '20px',
+    cursor: 'pointer',
+    accentColor: '#4F46E5',
   },
   itemImg: {
     width: '80px',
@@ -182,93 +196,180 @@ const useStyles = createUseStyles({
 
 const CartModal = ({ isOpen, onClose, items = [], onRemove }) => {
   const classes = useStyles();
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [receiptData, setReceiptData] = useState(null);
+  const [showReceipt, setShowReceipt] = useState(false);
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  if (!isOpen) return null;
-
-  // Helper untuk membersihkan dan memparsing harga dengan lebih agresif
   const parsePrice = (price) => {
     if (typeof price === 'number') return price;
     if (!price) return 0;
-
-    // Konversi ke string, hapus semua karakter kecuali angka
-    // Contoh: "Rp 90.000" -> "90000"
     const cleaned = String(price).replace(/[^0-9]/g, '');
-
-    // Parse ke float, jika gagal return 0
     return parseFloat(cleaned) || 0;
   };
 
-  const total = items.reduce(
-    (acc, item) => acc + parsePrice(item.price) * (item.quantity || 1),
-    0,
-  );
+  const handleCheckboxChange = (id) => {
+    setSelectedIds((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((itemId) => itemId !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
+  };
+
+  const selectedItems = useMemo(() => {
+    return items.filter((item) => selectedIds.includes(item.id || item._id));
+  }, [items, selectedIds]);
+
+  const total = useMemo(() => {
+    return selectedItems.reduce(
+      (acc, item) => acc + parsePrice(item.price) * (item.quantity || 1),
+      0,
+    );
+  }, [selectedItems]);
+
+  const handleCheckout = async () => {
+    if (selectedItems.length === 0) {
+      toast.error('Pilih produk yang ingin di-checkout');
+      return;
+    }
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.token) {
+      toast.error('Silakan login terlebih dahulu');
+      return;
+    }
+
+    const toastId = toast.loading('Memproses transaksi...');
+
+    try {
+      const payload = {
+        items: selectedItems.map((item) => ({
+          id: item.id || item._id,
+          quantity: item.quantity || 1,
+          name: item.name,
+          price: parsePrice(item.price),
+        })),
+      };
+
+      const response = await axios.post(`${BASE_URL}/checkout`, payload, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+
+      setReceiptData(response.data);
+      setShowReceipt(true);
+
+      selectedItems.forEach((item) => {
+        onRemove(item.id || item._id);
+      });
+      setSelectedIds([]);
+
+      toast.success('Pembelian Berhasil!', { id: toastId });
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.error || 'Transaksi gagal', {
+        id: toastId,
+      });
+    }
+  };
+
+  if (!isOpen) return null;
 
   return (
-    <div className={classes.overlay} onClick={onClose}>
-      <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
-        <div className={classes.header}>
-          <div className={classes.title}>
-            <ShoppingBag size={24} />
-            Keranjang Belanja
-          </div>
-          <button className={classes.closeBtn} onClick={onClose}>
-            <X size={24} />
-          </button>
-        </div>
-
-        <div className={classes.body}>
-          {items.length === 0 ? (
-            <div className={classes.emptyState}>
-              <ShoppingBag
-                size={48}
-                style={{ marginBottom: '1rem', opacity: 0.5 }}
-              />
-              <p>Keranjang Anda masih kosong</p>
+    <>
+      <div className={classes.overlay} onClick={onClose}>
+        <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
+          <div className={classes.header}>
+            <div className={classes.title}>
+              <ShoppingBag size={24} />
+              Keranjang Belanja
             </div>
-          ) : (
-            items.map((item) => (
-              <div key={item.id || item._id} className={classes.itemCard}>
-                <img
-                  src={item.imageUrl}
-                  alt={item.name}
-                  className={classes.itemImg}
-                  onError={(e) => (e.target.style.display = 'none')}
+            <button className={classes.closeBtn} onClick={onClose}>
+              <X size={24} />
+            </button>
+          </div>
+
+          <div className={classes.body}>
+            {items.length === 0 ? (
+              <div className={classes.emptyState}>
+                <ShoppingBag
+                  size={48}
+                  style={{ marginBottom: '1rem', opacity: 0.5 }}
                 />
-                <div className={classes.itemInfo}>
-                  <div>
-                    <div className={classes.itemName}>{item.name}</div>
-                    <div className={classes.itemPrice}>
-                      Rp {parsePrice(item.price).toLocaleString('id-ID')}
+                <p>Keranjang Anda masih kosong</p>
+              </div>
+            ) : (
+              items.map((item) => {
+                const itemId = item.id || item._id;
+                return (
+                  <div key={itemId} className={classes.itemCard}>
+                    <div className={classes.checkboxContainer}>
+                      <input
+                        type="checkbox"
+                        className={classes.checkbox}
+                        checked={selectedIds.includes(itemId)}
+                        onChange={() => handleCheckboxChange(itemId)}
+                      />
+                    </div>
+                    <img
+                      src={item.imageUrl}
+                      alt={item.name}
+                      className={classes.itemImg}
+                      onError={(e) => (e.target.style.display = 'none')}
+                    />
+                    <div className={classes.itemInfo}>
+                      <div>
+                        <div className={classes.itemName}>{item.name}</div>
+                        <div className={classes.itemPrice}>
+                          Rp {parsePrice(item.price).toLocaleString('id-ID')}
+                        </div>
+                      </div>
+                      <div className={classes.itemMeta}>
+                        <span className={classes.qtyBadge}>
+                          Qty: {item.quantity || 1}
+                        </span>
+                        <button
+                          className={classes.removeBtn}
+                          onClick={() => onRemove(itemId)}
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <div className={classes.itemMeta}>
-                    <span className={classes.qtyBadge}>
-                      Qty: {item.quantity || 1}
-                    </span>
-                    <button
-                      className={classes.removeBtn}
-                      onClick={() => onRemove(item.id || item._id)}
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        <div className={classes.footer}>
-          <div className={classes.totalRow}>
-            <span>Total</span>
-            <span>Rp {total.toLocaleString('id-ID')}</span>
+                );
+              })
+            )}
           </div>
-          <button className={classes.checkoutBtn} disabled={items.length === 0}>
-            Checkout Sekarang
-          </button>
+
+          <div className={classes.footer}>
+            <div className={classes.totalRow}>
+              <span>Total (Dipilih)</span>
+              <span>Rp {total.toLocaleString('id-ID')}</span>
+            </div>
+            <button
+              className={classes.checkoutBtn}
+              onClick={handleCheckout}
+              disabled={selectedItems.length === 0}
+            >
+              Checkout Sekarang ({selectedItems.length})
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+
+      {showReceipt && receiptData && (
+        <ReceiptModal
+          transaction={receiptData}
+          onClose={() => {
+            setShowReceipt(false);
+            setReceiptData(null);
+            onClose();
+          }}
+        />
+      )}
+    </>
   );
 };
 
