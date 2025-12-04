@@ -310,12 +310,10 @@ const ProductList = () => {
 
   const handleAddToCart = (product) => {
     const cleanPrice = parseFloat(String(product.price).replace(/[^0-9]/g, ''));
-
     const productToAdd = {
       ...product,
       price: isNaN(cleanPrice) ? 0 : cleanPrice,
     };
-
     addToCart(productToAdd);
     toast.success('Produk ditambahkan ke keranjang');
   };
@@ -326,8 +324,8 @@ const ProductList = () => {
       return;
     }
 
-    const token = localStorage.getItem('token');
-    if (!token) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.token) {
       toast.error('Silakan login terlebih dahulu');
       navigate('/login');
       return;
@@ -336,29 +334,29 @@ const ProductList = () => {
     const toastId = toast.loading('Memproses transaksi...');
 
     try {
-      const response = await axios.post(
-        `${BASE_URL}/checkout`,
-        {
-          items: [
-            {
-              id: product.id || product._id,
-              quantity: 1,
-              name: product.name,
-              price: product.price,
-            },
-          ],
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
+      const cleanPrice = parseFloat(
+        String(product.price).replace(/[^0-9]/g, ''),
       );
+      const payload = {
+        items: [
+          {
+            id: product.id || product._id,
+            quantity: 1,
+            name: product.name,
+            price: cleanPrice,
+          },
+        ],
+      };
 
-      toast.success('Pembelian Berhasil!', { id: toastId });
+      const response = await axios.post(`${BASE_URL}/checkout`, payload, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+
       setReceiptData(response.data);
       setShowReceipt(true);
+      toast.success('Pembelian Berhasil!', { id: toastId });
       refetch();
     } catch (error) {
-      console.error(error);
       toast.error(error.response?.data?.error || 'Transaksi gagal', {
         id: toastId,
       });
@@ -487,7 +485,7 @@ const ProductList = () => {
                         title="Tambahkan ke Keranjang"
                       >
                         <ShoppingCart size={16} />
-                        <span>Tambahkan ke Keranjang</span>
+                        <span>+ Keranjang</span>
                       </button>
 
                       <button
@@ -513,7 +511,7 @@ const ProductList = () => {
                             className={`${classes.actionBtn} ${classes.btnDelete}`}
                           >
                             <Trash2 size={16} />
-                            <span>Hapus Produk</span>
+                            <span>Hapus</span>
                           </button>
                         </>
                       ) : (
@@ -550,7 +548,10 @@ const ProductList = () => {
       {showReceipt && receiptData && (
         <ReceiptModal
           transaction={receiptData}
-          onClose={() => setShowReceipt(false)}
+          onClose={() => {
+            setShowReceipt(false);
+            setReceiptData(null);
+          }}
         />
       )}
     </div>
