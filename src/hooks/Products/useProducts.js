@@ -4,7 +4,8 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useLanguage } from '../../context/LanguageContext';
 
-const API_URL = 'https://ravano-shops-e7559390ffbd.herokuapp.com/api/products';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_URL = `${BASE_URL}/products`;
 
 const formatPrice = (value) => {
   if (value === undefined || value === null || value === '') return '';

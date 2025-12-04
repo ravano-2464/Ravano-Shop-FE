@@ -246,6 +246,7 @@ const ProductList = () => {
   const navigate = useNavigate();
   const { products, loading, deleteProduct, refetch, t } = useProducts();
   const { addToCart } = useCart();
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const [search, setSearch] = useState('');
   const [minPrice, setMinPrice] = useState('');
@@ -308,10 +309,8 @@ const ProductList = () => {
   }, [products, search, minPrice, maxPrice, currentUser]);
 
   const handleAddToCart = (product) => {
-    // FIX: Sanitasi harga di sini untuk mencegah NaN di CartModal
     const cleanPrice = parseFloat(String(product.price).replace(/[^0-9]/g, ''));
 
-    // Buat object produk baru dengan harga yang sudah bersih
     const productToAdd = {
       ...product,
       price: isNaN(cleanPrice) ? 0 : cleanPrice,
@@ -338,7 +337,7 @@ const ProductList = () => {
 
     try {
       const response = await axios.post(
-        'https://ravano-shops-e7559390ffbd.herokuapp.com/api/checkout',
+        `${BASE_URL}/checkout`,
         {
           items: [
             {

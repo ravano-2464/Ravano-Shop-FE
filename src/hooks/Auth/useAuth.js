@@ -3,7 +3,7 @@ import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const API_URL = 'https://ravano-shops-e7559390ffbd.herokuapp.com/api/auth';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const useAuth = () => {
   const context = useContext(AuthContext);
@@ -17,7 +17,7 @@ const useAuth = () => {
   const loginUser = async (email, password) => {
     const toastId = toast.loading('Signing in...');
     try {
-      const response = await axios.post(`${API_URL}/login`, {
+      const response = await axios.post(`${BASE_URL}/auth/login`, {
         email,
         password,
       });
@@ -36,7 +36,7 @@ const useAuth = () => {
   const registerUser = async (name, email, password) => {
     const toastId = toast.loading('Creating account...');
     try {
-      const response = await axios.post(`${API_URL}/register`, {
+      const response = await axios.post(`${BASE_URL}/auth/register`, {
         name,
         email,
         password,
