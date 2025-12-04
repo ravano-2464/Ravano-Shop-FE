@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
 import useProducts from '../hooks/Products/useProducts';
@@ -167,6 +167,25 @@ const useStyles = createUseStyles({
     '&:hover': { backgroundColor: '#4338CA' },
     '&:disabled': { opacity: 0.7, cursor: 'not-allowed' },
   },
+  spinner: {
+    width: '2.5rem',
+    height: '2.5rem',
+    border: '3px solid #E5E7EB',
+    borderTop: '3px solid #4F46E5',
+    borderRadius: '50%',
+    animation: '$spin 1s linear infinite',
+  },
+  '@keyframes spin': {
+    to: { transform: 'rotate(360deg)' },
+  },
+  errorText: {
+    color: '#EF4444',
+    fontWeight: '600',
+    fontSize: '0.875rem',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+  },
 });
 
 const ProductEdit = () => {
@@ -174,6 +193,17 @@ const ProductEdit = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const { formData, handleChange, handleSubmit, loading, t } = useProducts(id);
+
+  const [imgState, setImgState] = useState({ loading: false, error: false });
+  const [prevImageUrl, setPrevImageUrl] = useState(formData.imageUrl);
+
+  if (formData.imageUrl !== prevImageUrl) {
+    setPrevImageUrl(formData.imageUrl);
+    setImgState({
+      loading: !!formData.imageUrl,
+      error: false,
+    });
+  }
 
   if (loading && !formData.name) return <div>{t.list.loading}</div>;
 
@@ -278,17 +308,32 @@ const ProductEdit = () => {
             <div className={classes.previewCard}>
               <div className={classes.previewLabel}>{t.form.preview}</div>
               <div className={classes.imageBox}>
-                {formData.imageUrl ? (
-                  <img
-                    src={formData.imageUrl}
-                    alt="Preview"
-                    className={classes.previewImg}
-                    onError={(e) => (e.target.style.display = 'none')}
-                  />
-                ) : (
+                {!formData.imageUrl ? (
                   <span className={classes.placeholder}>
                     {t.form.imagePreview}
                   </span>
+                ) : (
+                  <>
+                    {imgState.loading && <div className={classes.spinner} />}
+                    {imgState.error && !imgState.loading && (
+                      <span className={classes.errorText}>No Image</span>
+                    )}
+                    <img
+                      src={formData.imageUrl}
+                      alt="Preview"
+                      className={classes.previewImg}
+                      style={{
+                        display:
+                          imgState.loading || imgState.error ? 'none' : 'block',
+                      }}
+                      onLoad={() =>
+                        setImgState({ loading: false, error: false })
+                      }
+                      onError={() =>
+                        setImgState({ loading: false, error: true })
+                      }
+                    />
+                  </>
                 )}
               </div>
               <h3>{formData.name || 'Product Name'}</h3>
