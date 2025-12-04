@@ -485,7 +485,7 @@ const ProductList = () => {
                         title="Tambahkan ke Keranjang"
                       >
                         <ShoppingCart size={16} />
-                        <span>+ Keranjang</span>
+                        <span>Tambahkan Ke Keranjang</span>
                       </button>
 
                       <button
@@ -511,7 +511,7 @@ const ProductList = () => {
                             className={`${classes.actionBtn} ${classes.btnDelete}`}
                           >
                             <Trash2 size={16} />
-                            <span>Hapus</span>
+                            <span>Hapus Produk</span>
                           </button>
                         </>
                       ) : (
