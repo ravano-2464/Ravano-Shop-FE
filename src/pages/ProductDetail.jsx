@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
 import useProducts from '../hooks/Products/useProducts';
+import toast from 'react-hot-toast';
 
 const useStyles = createUseStyles({
   page: {
@@ -184,7 +185,7 @@ const useStyles = createUseStyles({
 const ProductDetail = () => {
   const { id } = useParams();
   const classes = useStyles();
-  const { productDetail, loading, buyProduct, t } = useProducts(id);
+  const { productDetail, loading, buyProduct, refetch, t } = useProducts(id);
 
   const formatPrice = (value) => {
     if (!value) return '0';
@@ -204,7 +205,14 @@ const ProductDetail = () => {
 
   const handleOrder = async () => {
     if (productDetail.stock > 0) {
-      await buyProduct(id);
+      const toastId = toast.loading('Processing...');
+      try {
+        await buyProduct(id);
+        if (refetch) await refetch();
+        toast.success('Success!', { id: toastId });
+      } catch  {
+        toast.error('Failed', { id: toastId });
+      }
     }
   };
 
