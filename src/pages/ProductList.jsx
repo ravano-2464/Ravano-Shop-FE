@@ -13,47 +13,68 @@ const useStyles = createUseStyles({
   page: {
     backgroundColor: '#F9FAFB',
     minHeight: '100vh',
-    padding: '2rem 1rem',
+    padding: '1rem',
+    '@media (min-width: 768px)': {
+      padding: '2rem',
+    },
   },
   container: {
     maxWidth: '1280px',
     margin: '0 auto',
   },
   header: {
-    marginBottom: '3rem',
+    marginBottom: '2rem',
     display: 'flex',
     flexDirection: 'column',
-    gap: '1.5rem',
+    gap: '1rem',
     '@media (min-width: 768px)': {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      marginBottom: '3rem',
     },
   },
   titleGroup: {
+    textAlign: 'center',
+    '@media (min-width: 768px)': {
+      textAlign: 'left',
+    },
     '& h1': {
-      fontSize: '2rem',
+      fontSize: '1.75rem',
       fontWeight: '800',
       color: '#111827',
-      marginBottom: '0.5rem',
+      marginBottom: '0.25rem',
+      '@media (min-width: 768px)': {
+        fontSize: '2rem',
+        marginBottom: '0.5rem',
+      },
     },
     '& p': {
       color: '#6B7280',
-      fontSize: '1rem',
+      fontSize: '0.9rem',
+      '@media (min-width: 768px)': {
+        fontSize: '1rem',
+      },
     },
   },
   addButton: {
     backgroundColor: '#4F46E5',
     color: 'white',
-    padding: '0.75rem 1.5rem',
+    padding: '0.75rem 1rem',
     borderRadius: '0.75rem',
     fontWeight: '600',
     textDecoration: 'none',
     boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.2)',
     transition: 'all 0.2s',
-    display: 'inline-flex',
+    display: 'flex',
+    justifyContent: 'center',
     alignItems: 'center',
     gap: '0.5rem',
+    width: '100%',
+    '@media (min-width: 768px)': {
+      width: 'auto',
+      padding: '0.75rem 1.5rem',
+    },
     '&:hover': {
       backgroundColor: '#4338CA',
       transform: 'translateY(-2px)',
@@ -66,10 +87,11 @@ const useStyles = createUseStyles({
     boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
     marginBottom: '2rem',
     display: 'grid',
-    gap: '1rem',
+    gap: '0.75rem',
     gridTemplateColumns: '1fr',
     '@media (min-width: 768px)': {
       gridTemplateColumns: '2fr 1fr 1fr',
+      gap: '1rem',
     },
   },
   searchInput: {
@@ -88,8 +110,12 @@ const useStyles = createUseStyles({
   },
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-    gap: '2rem',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+    gap: '1rem',
+    '@media (min-width: 768px)': {
+      gap: '2rem',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    },
   },
   card: {
     backgroundColor: 'white',
@@ -108,16 +134,16 @@ const useStyles = createUseStyles({
   },
   badgesContainer: {
     position: 'absolute',
-    top: '1rem',
-    right: '1rem',
+    top: '0.75rem',
+    right: '0.75rem',
     zIndex: 10,
     display: 'flex',
     gap: '0.5rem',
   },
   badge: {
-    padding: '0.25rem 0.75rem',
+    padding: '0.25rem 0.6rem',
     borderRadius: '9999px',
-    fontSize: '0.75rem',
+    fontSize: '0.7rem',
     fontWeight: '700',
     color: 'white',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
@@ -129,10 +155,13 @@ const useStyles = createUseStyles({
   badgePrivate: { backgroundColor: '#6B7280' },
   badgeStock: { backgroundColor: '#F59E0B', color: 'black' },
   imageWrapper: {
-    height: '240px',
+    height: '200px',
     backgroundColor: '#F3F4F6',
     position: 'relative',
     overflow: 'hidden',
+    '@media (min-width: 768px)': {
+      height: '240px',
+    },
   },
   productImage: {
     width: '100%',
@@ -144,31 +173,45 @@ const useStyles = createUseStyles({
     },
   },
   cardContent: {
-    padding: '1.5rem',
+    padding: '1.25rem',
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
+    '@media (min-width: 768px)': {
+      padding: '1.5rem',
+    },
   },
   productName: {
-    fontSize: '1.125rem',
+    fontSize: '1rem',
     fontWeight: '700',
     color: '#111827',
     marginBottom: '0.25rem',
     lineHeight: 1.4,
+    '@media (min-width: 768px)': {
+      fontSize: '1.125rem',
+    },
   },
   creatorInfo: {
-    fontSize: '0.8rem',
+    fontSize: '0.75rem',
     color: '#6B7280',
     marginBottom: '1rem',
     display: 'flex',
     flexDirection: 'column',
-    gap: '0.2rem',
+    gap: '0.1rem',
+    '@media (min-width: 768px)': {
+      fontSize: '0.8rem',
+      gap: '0.2rem',
+    },
   },
   productPrice: {
-    fontSize: '1.25rem',
+    fontSize: '1.125rem',
     fontWeight: '800',
     color: '#4F46E5',
-    marginBottom: '1rem',
+    marginBottom: '0.75rem',
+    '@media (min-width: 768px)': {
+      fontSize: '1.25rem',
+      marginBottom: '1rem',
+    },
   },
   description: {
     color: '#6B7280',
@@ -201,6 +244,8 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     justifyContent: 'center',
     gap: '0.3rem',
+    minWidth: '0',
+    whiteSpace: 'nowrap',
   },
   btnDetail: {
     backgroundColor: '#F3F4F6',
@@ -234,7 +279,7 @@ const useStyles = createUseStyles({
   emptyState: {
     gridColumn: '1 / -1',
     textAlign: 'center',
-    padding: '4rem',
+    padding: '3rem 1rem',
     backgroundColor: 'white',
     borderRadius: '1rem',
     border: '2px dashed #E5E7EB',
@@ -485,7 +530,7 @@ const ProductList = () => {
                         title="Tambahkan ke Keranjang"
                       >
                         <ShoppingCart size={16} />
-                        <span>Tambahkan Ke Keranjang</span>
+                        <span style={{ fontSize: '0.8rem' }}>+ Keranjang</span>
                       </button>
 
                       <button
@@ -494,7 +539,7 @@ const ProductList = () => {
                         className={`${classes.actionBtn} ${classes.btnBuy}`}
                       >
                         <Zap size={16} />
-                        {product.stock > 0 ? t.list.buy : t.list.outOfStock}
+                        {product.stock > 0 ? t.list.buy : 'Habis'}
                       </button>
 
                       {isOwner ? (
@@ -504,14 +549,12 @@ const ProductList = () => {
                             className={`${classes.actionBtn} ${classes.btnEdit}`}
                           >
                             <Edit size={16} />
-                            {t.list.edit}
                           </Link>
                           <button
                             onClick={() => handleDeleteClick(product)}
                             className={`${classes.actionBtn} ${classes.btnDelete}`}
                           >
                             <Trash2 size={16} />
-                            <span>Hapus Produk</span>
                           </button>
                         </>
                       ) : (
@@ -520,7 +563,6 @@ const ProductList = () => {
                           className={`${classes.actionBtn} ${classes.btnDetail}`}
                         >
                           <Eye size={16} />
-                          {t.list.view}
                         </Link>
                       )}
                     </div>

@@ -8,10 +8,14 @@ const useStyles = createUseStyles({
   page: {
     backgroundColor: '#F9FAFB',
     minHeight: '100vh',
-    padding: '3rem 1rem',
+    padding: '1.5rem 1rem',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    '@media (min-width: 900px)': {
+      alignItems: 'center',
+      padding: '3rem 1rem',
+    },
   },
   container: {
     backgroundColor: 'white',
@@ -35,11 +39,12 @@ const useStyles = createUseStyles({
     justifyContent: 'center',
     padding: '2rem',
     position: 'relative',
+    minHeight: '300px',
   },
   visibilityBadge: {
     position: 'absolute',
-    top: '2rem',
-    right: '2rem',
+    top: '1.5rem',
+    right: '1.5rem',
     padding: '0.5rem 1rem',
     borderRadius: '9999px',
     fontWeight: '700',
@@ -48,20 +53,24 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     gap: '0.5rem',
     boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+    fontSize: '0.875rem',
   },
   public: { backgroundColor: '#10B981' },
   private: { backgroundColor: '#6B7280' },
   image: {
-    maxWidth: '90%',
+    maxWidth: '100%',
     maxHeight: '400px',
     objectFit: 'contain',
     filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.1))',
   },
   contentSide: {
     flex: 1,
-    padding: '3rem',
+    padding: '1.5rem',
     display: 'flex',
     flexDirection: 'column',
+    '@media (min-width: 768px)': {
+      padding: '3rem',
+    },
   },
   backLink: {
     display: 'inline-flex',
@@ -71,43 +80,64 @@ const useStyles = createUseStyles({
     textDecoration: 'none',
     fontWeight: '600',
     fontSize: '0.9rem',
-    marginBottom: '2rem',
+    marginBottom: '1.5rem',
     '&:hover': { color: '#111827' },
   },
   title: {
-    fontSize: '2.5rem',
+    fontSize: '1.75rem',
     fontWeight: '900',
     color: '#111827',
     marginBottom: '0.5rem',
-    lineHeight: 1.1,
+    lineHeight: 1.2,
+    '@media (min-width: 768px)': {
+      fontSize: '2.5rem',
+      lineHeight: 1.1,
+    },
   },
   metaInfo: {
-    fontSize: '0.9rem',
+    fontSize: '0.85rem',
     color: '#6B7280',
     marginBottom: '1.5rem',
     display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
+    gridTemplateColumns: '1fr',
     gap: '0.5rem',
     padding: '1rem',
     backgroundColor: '#F9FAFB',
     borderRadius: '0.5rem',
+    '@media (min-width: 768px)': {
+      gridTemplateColumns: '1fr 1fr',
+      fontSize: '0.9rem',
+    },
   },
   priceRow: {
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'column',
+    gap: '1rem',
     marginBottom: '2rem',
+    '@media (min-width: 768px)': {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
   },
   price: {
-    fontSize: '2rem',
+    fontSize: '1.75rem',
     fontWeight: '700',
     color: '#4F46E5',
+    '@media (min-width: 768px)': {
+      fontSize: '2rem',
+    },
   },
   stock: {
-    fontSize: '1.25rem',
+    fontSize: '1rem',
     fontWeight: '600',
     padding: '0.5rem 1rem',
     borderRadius: '0.5rem',
+    display: 'inline-block',
+    textAlign: 'center',
+    '@media (min-width: 768px)': {
+      fontSize: '1.25rem',
+    },
   },
   inStock: {
     backgroundColor: '#D1FAE5',
@@ -136,13 +166,20 @@ const useStyles = createUseStyles({
   descText: {
     color: '#374151',
     lineHeight: 1.7,
-    fontSize: '1rem',
+    fontSize: '0.95rem',
+    '@media (min-width: 768px)': {
+      fontSize: '1rem',
+    },
   },
   actions: {
     display: 'grid',
-    gridTemplateColumns: '2fr 1fr',
+    gridTemplateColumns: '1fr',
     gap: '1rem',
-    marginTop: '3rem',
+    marginTop: '2rem',
+    '@media (min-width: 768px)': {
+      gridTemplateColumns: '2fr 1fr',
+      marginTop: '3rem',
+    },
   },
   orderBtn: {
     padding: '1rem',
@@ -210,7 +247,7 @@ const ProductDetail = () => {
         await buyProduct(id);
         if (refetch) await refetch();
         toast.success('Success!', { id: toastId });
-      } catch  {
+      } catch {
         toast.error('Failed', { id: toastId });
       }
     }
