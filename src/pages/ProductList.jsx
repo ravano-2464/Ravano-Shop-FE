@@ -338,7 +338,7 @@ const ProductList = () => {
 
     try {
       const response = await axios.post(
-        '/api/checkout',
+        'https://ravano-shops-e7559390ffbd.herokuapp.com/api/checkout',
         {
           items: [
             {
