@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Wallet, Plus } from 'lucide-react';
+import axios from 'axios';
 import useAuth from '../hooks/Auth/useAuth';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../hooks/Cart/useCart';
 import CartModal from './CartModal';
 import LogoutConfirmationModal from './LogoutConfirmationModal';
+import TopUpModal from './TopUpModal';
 
 const useStyles = createUseStyles({
   navbar: {
@@ -34,9 +36,7 @@ const useStyles = createUseStyles({
     color: '#111827',
     letterSpacing: '-0.025em',
   },
-  brandIcon: {
-    fontSize: '1.75rem',
-  },
+  brandIcon: { fontSize: '1.75rem' },
   brandText: {
     background:
       'linear-gradient(90deg, #111827, #4F46E5, #7C3AED, #EC4899, #4F46E5, #111827)',
@@ -148,6 +148,24 @@ const useStyles = createUseStyles({
     padding: '0.1rem 0.4rem',
     borderRadius: '99px',
   },
+  walletBtn: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    backgroundColor: '#ECFDF5',
+    color: '#059669',
+    padding: '0.5rem 1rem',
+    borderRadius: '2rem',
+    fontWeight: '700',
+    border: '1px solid #A7F3D0',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    '&:hover': { backgroundColor: '#D1FAE5', transform: 'translateY(-1px)' },
+  },
+  walletBalance: {
+    fontSize: '0.9rem',
+    marginRight: '0.25rem',
+  },
   mobileMenuBtn: {
     display: 'none',
     background: 'none',
@@ -182,6 +200,26 @@ const Navbar = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isTopUpOpen, setIsTopUpOpen] = useState(false);
+  const [balance, setBalance] = useState(0);
+
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (!user?.token) return;
+      try {
+        const { data } = await axios.get(`${BASE_URL}/auth/me`, {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+        setBalance(data.balance || 0);
+      } catch (error) {
+        console.error('Failed to fetch balance', error);
+      }
+    };
+
+    fetchBalance();
+  }, [user, BASE_URL, location.pathname]);
 
   const isActive = (path) => location.pathname === path;
 
@@ -220,6 +258,20 @@ const Navbar = () => {
               {item.label}
             </Link>
           ))}
+
+          {user && (
+            <button
+              className={classes.walletBtn}
+              onClick={() => setIsTopUpOpen(true)}
+              title="Top Up Saldo"
+            >
+              <Wallet size={18} />
+              <span className={classes.walletBalance}>
+                Rp {balance.toLocaleString('id-ID')}
+              </span>
+              <Plus size={14} strokeWidth={3} />
+            </button>
+          )}
 
           <button
             className={classes.cartBtn}
@@ -279,6 +331,25 @@ const Navbar = () => {
         onRemove={removeFromCart}
       />
 
+      <TopUpModal
+        isOpen={isTopUpOpen}
+        onClose={() => setIsTopUpOpen(false)}
+        onSuccess={() => {
+          const fetchBalance = async () => {
+            if (!user?.token) return;
+            try {
+              const { data } = await axios.get(`${BASE_URL}/auth/me`, {
+                headers: { Authorization: `Bearer ${user.token}` },
+              });
+              setBalance(data.balance || 0);
+            } catch (error) {
+              console.error('Failed to fetch balance', error);
+            }
+          };
+          fetchBalance();
+        }}
+      />
+
       <LogoutConfirmationModal
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
@@ -297,6 +368,21 @@ const Navbar = () => {
               {item.label}
             </Link>
           ))}
+
+          {user && (
+            <button
+              className={classes.walletBtn}
+              onClick={() => {
+                setIsMobileOpen(false);
+                setIsTopUpOpen(true);
+              }}
+              style={{ justifyContent: 'center', width: '100%' }}
+            >
+              <Wallet size={18} />
+              <span>Rp {balance.toLocaleString('id-ID')}</span>
+              <Plus size={14} />
+            </button>
+          )}
 
           <button
             className={classes.cartBtn}
