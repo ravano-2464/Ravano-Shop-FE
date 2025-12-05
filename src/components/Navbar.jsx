@@ -207,31 +207,42 @@ const Navbar = () => {
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchBalance = async () => {
       if (!user?.token) return;
       try {
         const { data } = await axios.get(`${BASE_URL}/auth/me`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
-        setBalance(data.balance || 0);
+        if (isMounted) {
+          setBalance(data.balance || 0);
+        }
       } catch (error) {
-        console.error('Failed to fetch balance', error);
+        console.error(error);
       }
     };
 
     fetchBalance();
-  }, [user, BASE_URL, location.pathname, refreshTrigger]);
+
+    const onFocus = () => {
+      fetchBalance();
+    };
+
+    window.addEventListener('focus', onFocus);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener('focus', onFocus);
+    };
+  }, [user, BASE_URL, refreshTrigger, location.pathname]);
 
   const handleTopUpSuccess = () => {
     setRefreshTrigger((prev) => prev + 1);
-
-    setTimeout(() => {
-      setRefreshTrigger((prev) => prev + 1);
-    }, 2000);
-
-    setTimeout(() => {
-      setRefreshTrigger((prev) => prev + 1);
-    }, 5000);
+    const intervals = [2000, 5000, 8000];
+    intervals.forEach((delay) => {
+      setTimeout(() => setRefreshTrigger((prev) => prev + 1), delay);
+    });
   };
 
   const isActive = (path) => location.pathname === path;
