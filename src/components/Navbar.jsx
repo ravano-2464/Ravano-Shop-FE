@@ -202,6 +202,7 @@ const Navbar = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [balance, setBalance] = useState(0);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -219,7 +220,19 @@ const Navbar = () => {
     };
 
     fetchBalance();
-  }, [user, BASE_URL, location.pathname]);
+  }, [user, BASE_URL, location.pathname, refreshTrigger]);
+
+  const handleTopUpSuccess = () => {
+    setRefreshTrigger((prev) => prev + 1);
+
+    setTimeout(() => {
+      setRefreshTrigger((prev) => prev + 1);
+    }, 2000);
+
+    setTimeout(() => {
+      setRefreshTrigger((prev) => prev + 1);
+    }, 5000);
+  };
 
   const isActive = (path) => location.pathname === path;
 
@@ -334,20 +347,7 @@ const Navbar = () => {
       <TopUpModal
         isOpen={isTopUpOpen}
         onClose={() => setIsTopUpOpen(false)}
-        onSuccess={() => {
-          const fetchBalance = async () => {
-            if (!user?.token) return;
-            try {
-              const { data } = await axios.get(`${BASE_URL}/auth/me`, {
-                headers: { Authorization: `Bearer ${user.token}` },
-              });
-              setBalance(data.balance || 0);
-            } catch (error) {
-              console.error('Failed to fetch balance', error);
-            }
-          };
-          fetchBalance();
-        }}
+        onSuccess={handleTopUpSuccess}
       />
 
       <LogoutConfirmationModal
