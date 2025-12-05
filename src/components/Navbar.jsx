@@ -202,28 +202,27 @@ const Navbar = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [balance, setBalance] = useState(0);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    let isMounted = true;
-
     const fetchBalance = async () => {
       if (!user?.token) return;
       try {
         const { data } = await axios.get(`${BASE_URL}/auth/me`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
-        if (isMounted) {
-          setBalance(data.balance || 0);
-        }
+        setBalance(data.balance || 0);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching balance:', error);
       }
     };
 
     fetchBalance();
+
+    const interval = setInterval(() => {
+      fetchBalance();
+    }, 3000);
 
     const onFocus = () => {
       fetchBalance();
@@ -232,17 +231,28 @@ const Navbar = () => {
     window.addEventListener('focus', onFocus);
 
     return () => {
-      isMounted = false;
+      clearInterval(interval);
       window.removeEventListener('focus', onFocus);
     };
-  }, [user, BASE_URL, refreshTrigger, location.pathname]);
+  }, [user, BASE_URL, location.pathname]);
 
   const handleTopUpSuccess = () => {
-    setRefreshTrigger((prev) => prev + 1);
-    const intervals = [2000, 5000, 8000];
-    intervals.forEach((delay) => {
-      setTimeout(() => setRefreshTrigger((prev) => prev + 1), delay);
-    });
+    const refreshBalance = async () => {
+      if (!user?.token) return;
+      try {
+        const { data } = await axios.get(`${BASE_URL}/auth/me`, {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+        setBalance(data.balance || 0);
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+      }
+    };
+
+    refreshBalance();
+    setTimeout(() => refreshBalance(), 2000);
+    setTimeout(() => refreshBalance(), 5000);
+    setTimeout(() => refreshBalance(), 10000);
   };
 
   const isActive = (path) => location.pathname === path;
