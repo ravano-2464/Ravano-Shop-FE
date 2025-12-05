@@ -163,29 +163,34 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
         { headers: { Authorization: `Bearer ${user.token}` } },
       );
 
-      window.snap.pay(data.token, {
-        onSuccess: function () {
-          toast.success('Top up berhasil!');
-          setAmount('');
-          setLoading(false);
-          onSuccess();
-          onClose();
-        },
-        onPending: function () {
-          toast('Menunggu pembayaran...');
-          setLoading(false);
-          onClose();
-        },
-        onError: function () {
-          toast.error('Pembayaran gagal');
-          setLoading(false);
-        },
-        onClose: function () {
-          setLoading(false);
-        },
-      });
+      if (window.snap) {
+        window.snap.pay(data.token, {
+          onSuccess: function () {
+            toast.success('Top up berhasil!');
+            setAmount('');
+            setLoading(false);
+            onSuccess();
+            onClose();
+          },
+          onPending: function () {
+            toast('Menunggu pembayaran...');
+            setLoading(false);
+            onClose();
+          },
+          onError: function () {
+            toast.error('Pembayaran gagal');
+            setLoading(false);
+          },
+          onClose: function () {
+            setLoading(false);
+          },
+        });
+      } else {
+        toast.error('Midtrans belum siap. Silakan refresh halaman.');
+        setLoading(false);
+      }
     } catch (error) {
-      console.error(error);
+      console.error('Top up error:', error);
       toast.error('Gagal memproses top up');
       setLoading(false);
     }
