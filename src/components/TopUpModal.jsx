@@ -167,15 +167,18 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
         onSuccess: function () {
           toast.success('Top up berhasil!');
           setAmount('');
+          setLoading(false);
           onSuccess();
           onClose();
         },
         onPending: function () {
           toast('Menunggu pembayaran...');
+          setLoading(false);
           onClose();
         },
         onError: function () {
           toast.error('Pembayaran gagal');
+          setLoading(false);
         },
         onClose: function () {
           setLoading(false);
