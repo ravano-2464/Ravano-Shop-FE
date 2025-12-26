@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { createUseStyles } from 'react-jss';
 import { X, Wallet, CreditCard } from 'lucide-react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 const useStyles = createUseStyles({
   overlay: {
@@ -130,21 +130,67 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
   const classes = useStyles();
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  const BASE_URL =
+    import.meta.env.VITE_API_BASE_URL ||
+    'https://ravano-shops-e7559390ffbd.herokuapp.com/api';
+  const CLIENT_KEY =
+    import.meta.env.VITE_MIDTRANS_CLIENT_KEY || 'Mid-client-3QjoQrQZ8eECoAx0';
 
   useEffect(() => {
-    const snapSrc = 'https://app.sandbox.midtrans.com/snap/snap.js';
-    const clientKey = import.meta.env.VITE_MIDTRANS_CLIENT_KEY;
+    const snapUrl = 'https://app.sandbox.midtrans.com/snap/snap.js';
+    const scriptId = 'midtrans-script';
+    let script = document.getElementById(scriptId);
 
-    if (!document.querySelector(`script[src="${snapSrc}"]`)) {
-      const script = document.createElement('script');
-      script.src = snapSrc;
-      script.setAttribute('data-client-key', clientKey);
+    if (!script) {
+      script = document.createElement('script');
+      script.src = snapUrl;
+      script.id = scriptId;
+      script.setAttribute('data-client-key', CLIENT_KEY);
+      script.async = true;
       document.body.appendChild(script);
     }
+  }, [CLIENT_KEY]);
+
+  const handleQuickAmount = useCallback((val) => {
+    setAmount(val.toString());
   }, []);
 
-  const handleQuickAmount = (val) => setAmount(val.toString());
+  const handlePayment = useCallback(
+    (token) => {
+      if (window.snap) {
+        window.snap.pay(token, {
+          onSuccess: () => {
+            toast.success('Pembayaran berhasil!');
+            setAmount('');
+            setLoading(false);
+            if (onSuccess) onSuccess();
+            if (onClose) onClose();
+          },
+          onPending: () => {
+            toast('Menunggu pembayaran...');
+            setLoading(false);
+            if (onClose) onClose();
+          },
+          onError: (result) => {
+            console.error('Payment Error:', result);
+            toast.error(
+              'Gagal verifikasi otomatis. Cek dashboard jika saldo sudah terpotong.',
+            );
+            setLoading(false);
+          },
+          onClose: () => {
+            setLoading(false);
+            toast('Silakan selesaikan pembayaran.');
+          },
+        });
+      } else {
+        toast.error('Koneksi ke Midtrans gagal. Refresh halaman.');
+        setLoading(false);
+      }
+    },
+    [onSuccess, onClose],
+  );
 
   const handleTopUp = async () => {
     if (!amount || parseInt(amount) < 10000) {
@@ -153,45 +199,36 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
     }
 
     const user = JSON.parse(localStorage.getItem('user'));
-    if (!user) return;
+
+    if (!user && !localStorage.getItem('user')) {
+      toast.error('Sesi habis, silakan login ulang.');
+      return;
+    }
 
     setLoading(true);
+
     try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user?.token || ''}`,
+        },
+      };
+
       const { data } = await axios.post(
         `${BASE_URL}/topup`,
         { amount: parseInt(amount) },
-        { headers: { Authorization: `Bearer ${user.token}` } },
+        config,
       );
 
-      if (window.snap) {
-        window.snap.pay(data.token, {
-          onSuccess: function () {
-            toast.success('Top up berhasil!');
-            setAmount('');
-            setLoading(false);
-            onSuccess();
-            onClose();
-          },
-          onPending: function () {
-            toast('Menunggu pembayaran...');
-            setLoading(false);
-            onClose();
-          },
-          onError: function () {
-            toast.error('Pembayaran gagal');
-            setLoading(false);
-          },
-          onClose: function () {
-            setLoading(false);
-          },
-        });
+      if (data && data.token) {
+        handlePayment(data.token);
       } else {
-        toast.error('Midtrans belum siap. Silakan refresh halaman.');
-        setLoading(false);
+        throw new Error('Token pembayaran tidak valid');
       }
     } catch (error) {
-      console.error('Top up error:', error);
-      toast.error('Gagal memproses top up');
+      const errorMsg =
+        error.response?.data?.error || 'Gagal memproses transaksi';
+      toast.error(errorMsg);
       setLoading(false);
     }
   };
@@ -199,56 +236,59 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className={classes.overlay}>
-      <div className={classes.modal}>
-        <div className={classes.header}>
-          <div className={classes.title}>
-            <Wallet size={24} />
-            Top Up Saldo
-          </div>
-          <button className={classes.closeBtn} onClick={onClose}>
-            <X size={20} />
-          </button>
-        </div>
-
-        <div className={classes.body}>
-          <div className={classes.label}>Pilih Nominal</div>
-          <div className={classes.grid}>
-            {[20000, 50000, 100000].map((val) => (
-              <button
-                key={val}
-                className={classes.amountBtn}
-                onClick={() => handleQuickAmount(val)}
-              >
-                {val / 1000}k
-              </button>
-            ))}
+    <>
+      <Toaster position="top-center" />
+      <div className={classes.overlay}>
+        <div className={classes.modal}>
+          <div className={classes.header}>
+            <div className={classes.title}>
+              <Wallet size={24} />
+              Top Up Saldo
+            </div>
+            <button className={classes.closeBtn} onClick={onClose}>
+              <X size={20} />
+            </button>
           </div>
 
-          <div className={classes.label}>Atau Input Manual</div>
-          <div className={classes.inputGroup}>
-            <span className={classes.currencySymbol}>Rp</span>
-            <input
-              type="number"
-              className={classes.input}
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="0"
-              min="10000"
-            />
-          </div>
+          <div className={classes.body}>
+            <div className={classes.label}>Pilih Nominal</div>
+            <div className={classes.grid}>
+              {[20000, 50000, 100000].map((val) => (
+                <button
+                  key={val}
+                  className={classes.amountBtn}
+                  onClick={() => handleQuickAmount(val)}
+                >
+                  {val / 1000}k
+                </button>
+              ))}
+            </div>
 
-          <button
-            className={classes.submitBtn}
-            onClick={handleTopUp}
-            disabled={loading}
-          >
-            {loading ? 'Memproses...' : 'Bayar Sekarang'}
-            <CreditCard size={20} />
-          </button>
+            <div className={classes.label}>Atau Input Manual</div>
+            <div className={classes.inputGroup}>
+              <span className={classes.currencySymbol}>Rp</span>
+              <input
+                type="number"
+                className={classes.input}
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="0"
+                min="10000"
+              />
+            </div>
+
+            <button
+              className={classes.submitBtn}
+              onClick={handleTopUp}
+              disabled={loading}
+            >
+              {loading ? 'Memproses...' : 'Bayar Sekarang'}
+              <CreditCard size={20} />
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
