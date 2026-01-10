@@ -189,7 +189,21 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
     const cleanAmount = amount.replace(/\D/g, '');
 
     if (!cleanAmount || parseInt(cleanAmount) < 10000) {
-      toast.error('Minimal top up Rp 10.000');
+      toast.error('Minimal top up adalah Rp 10.000', {
+        style: {
+          background: '#FEE2E2',
+          color: '#991B1B',
+          fontWeight: '600',
+          border: '1px solid #FCA5A5',
+          borderRadius: '0.75rem',
+          padding: '1rem 1.5rem',
+        },
+        iconTheme: {
+          primary: '#DC2626',
+          secondary: '#FEE2E2',
+        },
+        duration: 4000,
+      });
       return;
     }
 
@@ -217,6 +231,21 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
 
       toast.success(
         `Saldo berhasil ditambahkan: Rp ${parseInt(cleanAmount).toLocaleString('id-ID')}`,
+        {
+          style: {
+            background: '#D1FAE5',
+            color: '#065F46',
+            fontWeight: '600',
+            border: '1px solid #6EE7B7',
+            borderRadius: '0.75rem',
+            padding: '1rem 1.5rem',
+          },
+          iconTheme: {
+            primary: '#10B981',
+            secondary: '#D1FAE5',
+          },
+          duration: 4000,
+        },
       );
       setAmount('');
       setLoading(false);
@@ -225,7 +254,21 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
       if (onClose) onClose();
     } catch (error) {
       const errorMsg = error.response?.data?.error || 'Gagal menambahkan saldo';
-      toast.error(errorMsg);
+      toast.error(errorMsg, {
+        style: {
+          background: '#FEE2E2',
+          color: '#991B1B',
+          fontWeight: '600',
+          border: '1px solid #FCA5A5',
+          borderRadius: '0.75rem',
+          padding: '1rem 1.5rem',
+        },
+        iconTheme: {
+          primary: '#DC2626',
+          secondary: '#FEE2E2',
+        },
+        duration: 4000,
+      });
       setLoading(false);
     }
   };
@@ -234,7 +277,21 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
     const cleanAmount = amount.replace(/\D/g, '');
 
     if (!cleanAmount || parseInt(cleanAmount) < 10000) {
-      toast.error('Minimal top up Rp 10.000');
+      toast.error('Minimal top up adalah Rp 10.000', {
+        style: {
+          background: '#FEE2E2',
+          color: '#991B1B',
+          fontWeight: '600',
+          border: '1px solid #FCA5A5',
+          borderRadius: '0.75rem',
+          padding: '1rem 1.5rem',
+        },
+        iconTheme: {
+          primary: '#DC2626',
+          secondary: '#FEE2E2',
+        },
+        duration: 4000,
+      });
       return;
     }
 
@@ -261,7 +318,21 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
       );
 
       if (data && data.redirect_url) {
-        toast.success('Mengalihkan ke halaman pembayaran...');
+        toast.success('Mengalihkan ke halaman pembayaran...', {
+          style: {
+            background: '#DBEAFE',
+            color: '#1E40AF',
+            fontWeight: '600',
+            border: '1px solid #93C5FD',
+            borderRadius: '0.75rem',
+            padding: '1rem 1.5rem',
+          },
+          iconTheme: {
+            primary: '#3B82F6',
+            secondary: '#DBEAFE',
+          },
+          duration: 3000,
+        });
         window.open(data.redirect_url, '_blank');
 
         setTimeout(() => {
@@ -276,7 +347,21 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
         error.response?.data?.error ||
         error.message ||
         'Gagal memproses transaksi';
-      toast.error(errorMsg);
+      toast.error(errorMsg, {
+        style: {
+          background: '#FEE2E2',
+          color: '#991B1B',
+          fontWeight: '600',
+          border: '1px solid #FCA5A5',
+          borderRadius: '0.75rem',
+          padding: '1rem 1.5rem',
+        },
+        iconTheme: {
+          primary: '#DC2626',
+          secondary: '#FEE2E2',
+        },
+        duration: 4000,
+      });
       setLoading(false);
     }
   };
