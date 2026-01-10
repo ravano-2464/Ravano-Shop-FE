@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
 import useProducts from '../hooks/Products/useProducts';
@@ -60,11 +60,25 @@ const useStyles = createUseStyles({
   },
   public: { backgroundColor: '#10B981' },
   private: { backgroundColor: '#6B7280' },
+  imageWrapper: {
+    maxWidth: '100%',
+    maxHeight: '400px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   image: {
     maxWidth: '100%',
     maxHeight: '400px',
     objectFit: 'contain',
     filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.1))',
+  },
+  noImagePlaceholder: {
+    color: '#D1D5DB',
+    fontSize: '1.5rem',
+    fontWeight: '600',
+    textAlign: 'center',
+    padding: '2rem',
   },
   contentSide: {
     flex: 1,
@@ -215,6 +229,9 @@ const useStyles = createUseStyles({
     textDecoration: 'none',
     border: '1px solid #E5E7EB',
     color: '#374151',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     '&:hover': {
       backgroundColor: '#F9FAFB',
       borderColor: '#D1D5DB',
@@ -232,6 +249,24 @@ const ProductDetail = () => {
   const [quantityModalOpen, setQuantityModalOpen] = useState(false);
   const [receiptData, setReceiptData] = useState(null);
   const [showReceipt, setShowReceipt] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  const currentUser = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem('user'));
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const isOwner = useMemo(() => {
+    if (!currentUser || !productDetail) return false;
+    return (
+      productDetail.user?._id === currentUser._id ||
+      productDetail.user?.id === currentUser._id ||
+      productDetail.user === currentUser._id
+    );
+  }, [currentUser, productDetail]);
 
   const formatPrice = (value) => {
     if (!value) return '0';
@@ -322,12 +357,18 @@ const ProductDetail = () => {
           >
             {productDetail.visibility === 'public' ? '🌐 Public' : '🔒 Private'}
           </div>
-          <img
-            src={productDetail.imageUrl}
-            alt={productDetail.name}
-            className={classes.image}
-            onError={(e) => (e.target.style.display = 'none')}
-          />
+          <div className={classes.imageWrapper}>
+            {!imageError ? (
+              <img
+                src={productDetail.imageUrl}
+                alt={productDetail.name}
+                className={classes.image}
+                onError={() => setImageError(true)}
+              />
+            ) : (
+              <div className={classes.noImagePlaceholder}>No Image</div>
+            )}
+          </div>
         </div>
         <div className={classes.contentSide}>
           <Link to="/list-products" className={classes.backLink}>
@@ -373,9 +414,14 @@ const ProductDetail = () => {
             >
               {productDetail.stock > 0 ? t.detail.buyBtn : t.list.outOfStock}
             </button>
-            <Link to={`/edit/products/${id}`} className={classes.secondaryBtn}>
-              {t.detail.editBtn}
-            </Link>
+            {isOwner && (
+              <Link
+                to={`/edit/products/${id}`}
+                className={classes.secondaryBtn}
+              >
+                {t.detail.editBtn}
+              </Link>
+            )}
           </div>
         </div>
       </div>
