@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
 import useAuth from '../hooks/Auth/useAuth';
 import { useLanguage } from '../context/LanguageContext';
 
 const useStyles = createUseStyles({
+  '@keyframes slideIn': {
+    from: {
+      transform: 'translateX(100%)',
+      opacity: 0,
+    },
+    to: {
+      transform: 'translateX(0)',
+      opacity: 1,
+    },
+  },
   container: {
     minHeight: '100vh',
     display: 'flex',
@@ -88,6 +98,37 @@ const useStyles = createUseStyles({
       textDecoration: 'underline',
     },
   },
+  notification: {
+    position: 'fixed',
+    top: '1.5rem',
+    right: '1.5rem',
+    backgroundColor: '#ef4444',
+    color: 'white',
+    padding: '1rem 1.5rem',
+    borderRadius: '0.5rem',
+    boxShadow:
+      '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    zIndex: 9999,
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.75rem',
+    fontWeight: '500',
+    fontSize: '0.875rem',
+    animation: '$slideIn 0.3s ease-out forwards',
+    maxWidth: '90vw',
+  },
+  closeButton: {
+    background: 'transparent',
+    border: 'none',
+    color: 'white',
+    cursor: 'pointer',
+    padding: '0',
+    marginLeft: '0.5rem',
+    opacity: 0.8,
+    '&:hover': {
+      opacity: 1,
+    },
+  },
 });
 
 const Login = () => {
@@ -97,23 +138,55 @@ const Login = () => {
   const { t } = useLanguage();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (error) setError(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const success = await loginUser(formData.email, formData.password);
-    if (success) {
-      navigate('/');
+    setError(null);
+
+    try {
+      const success = await loginUser(formData.email, formData.password);
+      if (success) {
+        navigate('/');
+      } else {
+        setError('Email atau password salah. Silakan coba lagi.');
+      }
+    } catch {
+      setError('Terjadi kesalahan saat login. Silakan coba lagi.');
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   return (
     <div className={classes.container}>
+      {error && (
+        <div className={classes.notification}>
+          <span>{error}</span>
+          <button
+            onClick={() => setError(null)}
+            className={classes.closeButton}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       <div className={classes.card}>
         <h2 className={classes.title}>{t.auth.loginTitle}</h2>
         <form onSubmit={handleSubmit} className={classes.form}>
