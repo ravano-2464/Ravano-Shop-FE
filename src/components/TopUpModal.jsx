@@ -124,6 +124,16 @@ const useStyles = createUseStyles({
     '&:hover': { backgroundColor: '#4338CA' },
     '&:disabled': { backgroundColor: '#9CA3AF', cursor: 'not-allowed' },
   },
+  devNote: {
+    marginTop: '1rem',
+    padding: '0.75rem',
+    backgroundColor: '#FEF3C7',
+    border: '1px solid #FCD34D',
+    borderRadius: '0.5rem',
+    fontSize: '0.85rem',
+    color: '#92400E',
+    lineHeight: '1.4',
+  },
 });
 
 const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
@@ -131,76 +141,59 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const BASE_URL =
-    import.meta.env.VITE_API_BASE_URL ||
-    'https://ravano-shops-e7559390ffbd.herokuapp.com/api';
-  const CLIENT_KEY =
-    import.meta.env.VITE_MIDTRANS_CLIENT_KEY || 'Mid-client-3QjoQrQZ8eECoAx0';
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const snapUrl = 'https://app.sandbox.midtrans.com/snap/snap.js';
-    const scriptId = 'midtrans-script';
-    let script = document.getElementById(scriptId);
+    const clientKey = import.meta.env.VITE_MIDTRANS_CLIENT_KEY;
 
-    if (!script) {
-      script = document.createElement('script');
-      script.src = snapUrl;
-      script.id = scriptId;
-      script.setAttribute('data-client-key', CLIENT_KEY);
-      script.async = true;
-      document.body.appendChild(script);
-    }
-  }, [CLIENT_KEY]);
+    if (!isOpen) return;
+
+    const existingScript = document.querySelector(`script[src="${snapUrl}"]`);
+    if (existingScript) return;
+
+    const script = document.createElement('script');
+    script.src = snapUrl;
+    script.setAttribute('data-client-key', clientKey);
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      const scriptToRemove = document.querySelector(`script[src="${snapUrl}"]`);
+      if (scriptToRemove) {
+        scriptToRemove.remove();
+      }
+    };
+  }, [isOpen]);
 
   const handleQuickAmount = useCallback((val) => {
-    setAmount(val.toString());
+    setAmount(val.toLocaleString('id-ID'));
   }, []);
 
-  const handlePayment = useCallback(
-    (token) => {
-      if (window.snap) {
-        window.snap.pay(token, {
-          onSuccess: () => {
-            toast.success('Pembayaran berhasil!');
-            setAmount('');
-            setLoading(false);
-            if (onSuccess) onSuccess();
-            if (onClose) onClose();
-          },
-          onPending: () => {
-            toast('Menunggu pembayaran...');
-            setLoading(false);
-            if (onClose) onClose();
-          },
-          onError: (result) => {
-            console.error('Payment Error:', result);
-            toast.error(
-              'Gagal verifikasi otomatis. Cek dashboard jika saldo sudah terpotong.',
-            );
-            setLoading(false);
-          },
-          onClose: () => {
-            setLoading(false);
-            toast('Silakan selesaikan pembayaran.');
-          },
-        });
-      } else {
-        toast.error('Koneksi ke Midtrans gagal. Refresh halaman.');
-        setLoading(false);
-      }
-    },
-    [onSuccess, onClose],
-  );
+  const handleAmountChange = (e) => {
+    const value = e.target.value;
+    const cleanValue = value.replace(/\D/g, '');
 
-  const handleTopUp = async () => {
-    if (!amount || parseInt(amount) < 10000) {
+    if (cleanValue === '') {
+      setAmount('');
+      return;
+    }
+
+    const formattedValue = parseInt(cleanValue).toLocaleString('id-ID');
+    setAmount(formattedValue);
+  };
+
+  const handleManualTopUp = async () => {
+    const cleanAmount = amount.replace(/\D/g, '');
+
+    if (!cleanAmount || parseInt(cleanAmount) < 10000) {
       toast.error('Minimal top up Rp 10.000');
       return;
     }
 
     const user = JSON.parse(localStorage.getItem('user'));
-
-    if (!user && !localStorage.getItem('user')) {
+    if (!user || !user.token) {
       toast.error('Sesi habis, silakan login ulang.');
       return;
     }
@@ -210,24 +203,78 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user?.token || ''}`,
+          Authorization: `Bearer ${user.token}`,
+          'Content-Type': 'application/json',
+        },
+      };
+
+      await axios.post(
+        `${BASE_URL}/manual-topup`,
+        { amount: parseInt(cleanAmount) },
+        config,
+      );
+
+      toast.success(
+        `Saldo berhasil ditambahkan: Rp ${parseInt(cleanAmount).toLocaleString('id-ID')}`,
+      );
+      setAmount('');
+      setLoading(false);
+
+      if (onSuccess) onSuccess();
+      if (onClose) onClose();
+    } catch (error) {
+      const errorMsg = error.response?.data?.error || 'Gagal menambahkan saldo';
+      toast.error(errorMsg);
+      setLoading(false);
+    }
+  };
+
+  const handleTopUp = async () => {
+    const cleanAmount = amount.replace(/\D/g, '');
+
+    if (!cleanAmount || parseInt(cleanAmount) < 10000) {
+      toast.error('Minimal top up Rp 10.000');
+      return;
+    }
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.token) {
+      toast.error('Sesi habis, silakan login ulang.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          'Content-Type': 'application/json',
         },
       };
 
       const { data } = await axios.post(
         `${BASE_URL}/topup`,
-        { amount: parseInt(amount) },
+        { amount: parseInt(cleanAmount) },
         config,
       );
 
-      if (data && data.token) {
-        handlePayment(data.token);
+      if (data && data.redirect_url) {
+        toast.success('Mengalihkan ke halaman pembayaran...');
+        window.open(data.redirect_url, '_blank');
+
+        setTimeout(() => {
+          setLoading(false);
+          if (onClose) onClose();
+        }, 1000);
       } else {
         throw new Error('Token pembayaran tidak valid');
       }
     } catch (error) {
       const errorMsg =
-        error.response?.data?.error || 'Gagal memproses transaksi';
+        error.response?.data?.error ||
+        error.message ||
+        'Gagal memproses transaksi';
       toast.error(errorMsg);
       setLoading(false);
     }
@@ -258,6 +305,7 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
                   key={val}
                   className={classes.amountBtn}
                   onClick={() => handleQuickAmount(val)}
+                  disabled={loading}
                 >
                   {val / 1000}k
                 </button>
@@ -268,12 +316,12 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
             <div className={classes.inputGroup}>
               <span className={classes.currencySymbol}>Rp</span>
               <input
-                type="number"
+                type="text"
                 className={classes.input}
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={handleAmountChange}
                 placeholder="0"
-                min="10000"
+                disabled={loading}
               />
             </div>
 
@@ -281,10 +329,27 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
               className={classes.submitBtn}
               onClick={handleTopUp}
               disabled={loading}
+              style={{ marginBottom: '0.75rem' }}
             >
-              {loading ? 'Memproses...' : 'Bayar Sekarang'}
+              {loading ? 'Memproses...' : 'Bayar via Midtrans'}
               <CreditCard size={20} />
             </button>
+
+            <button
+              className={classes.submitBtn}
+              onClick={handleManualTopUp}
+              disabled={loading}
+              style={{ backgroundColor: '#059669' }}
+            >
+              {loading ? 'Memproses...' : 'Top Up Manual (Dev)'}
+              <Wallet size={20} />
+            </button>
+
+            <div className={classes.devNote}>
+              <strong>Mode Development:</strong> Jika Midtrans error, gunakan
+              "Top Up Manual" untuk testing. Fitur ini akan dihapus di
+              production.
+            </div>
           </div>
         </div>
       </div>
