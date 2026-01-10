@@ -1,8 +1,11 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
 import useProducts from '../hooks/Products/useProducts';
 import toast from 'react-hot-toast';
+import axios from 'axios';
+import QuantityModal from '../components/QuantityModal';
+import ReceiptModal from '../components/ReceiptModal';
 
 const useStyles = createUseStyles({
   page: {
@@ -222,7 +225,13 @@ const useStyles = createUseStyles({
 const ProductDetail = () => {
   const { id } = useParams();
   const classes = useStyles();
-  const { productDetail, loading, buyProduct, refetch, t } = useProducts(id);
+  const navigate = useNavigate();
+  const { productDetail, loading, refetch, t } = useProducts(id);
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  const [quantityModalOpen, setQuantityModalOpen] = useState(false);
+  const [receiptData, setReceiptData] = useState(null);
+  const [showReceipt, setShowReceipt] = useState(false);
 
   const formatPrice = (value) => {
     if (!value) return '0';
@@ -240,16 +249,60 @@ const ProductDetail = () => {
     });
   };
 
-  const handleOrder = async () => {
-    if (productDetail.stock > 0) {
-      const toastId = toast.loading('Processing...');
-      try {
-        await buyProduct(id);
-        if (refetch) await refetch();
-        toast.success('Success!', { id: toastId });
-      } catch {
-        toast.error('Failed', { id: toastId });
-      }
+  const handleOrderClick = () => {
+    if (productDetail.stock <= 0) {
+      toast.error('Stok habis!');
+      return;
+    }
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.token) {
+      toast.error('Silakan login terlebih dahulu');
+      navigate('/login');
+      return;
+    }
+
+    setQuantityModalOpen(true);
+  };
+
+  const handleOrder = async (quantity) => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.token) {
+      toast.error('Silakan login terlebih dahulu');
+      navigate('/login');
+      return;
+    }
+
+    const toastId = toast.loading('Memproses transaksi...');
+
+    try {
+      const cleanPrice = parseFloat(
+        String(productDetail.price).replace(/[^0-9]/g, ''),
+      );
+      const payload = {
+        items: [
+          {
+            id: productDetail.id || productDetail._id,
+            quantity: quantity,
+            name: productDetail.name,
+            price: cleanPrice,
+          },
+        ],
+      };
+
+      const response = await axios.post(`${BASE_URL}/checkout`, payload, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+
+      setReceiptData(response.data);
+      setShowReceipt(true);
+      setQuantityModalOpen(false);
+      toast.success('Pembelian Berhasil!', { id: toastId });
+      if (refetch) await refetch();
+    } catch (error) {
+      toast.error(error.response?.data?.error || 'Transaksi gagal', {
+        id: toastId,
+      });
     }
   };
 
@@ -267,7 +320,7 @@ const ProductDetail = () => {
                 : classes.private
             }`}
           >
-            {productDetail.visibility === 'public' ? '🌍 Public' : '🔒 Private'}
+            {productDetail.visibility === 'public' ? '🌐 Public' : '🔒 Private'}
           </div>
           <img
             src={productDetail.imageUrl}
@@ -310,7 +363,7 @@ const ProductDetail = () => {
 
           <div className={classes.actions}>
             <button
-              onClick={handleOrder}
+              onClick={handleOrderClick}
               disabled={productDetail.stock <= 0}
               className={`${classes.orderBtn} ${
                 productDetail.stock > 0
@@ -326,6 +379,23 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+
+      <QuantityModal
+        isOpen={quantityModalOpen}
+        onClose={() => setQuantityModalOpen(false)}
+        product={productDetail}
+        onConfirm={handleOrder}
+      />
+
+      {showReceipt && receiptData && (
+        <ReceiptModal
+          transaction={receiptData}
+          onClose={() => {
+            setShowReceipt(false);
+            setReceiptData(null);
+          }}
+        />
+      )}
     </div>
   );
 };

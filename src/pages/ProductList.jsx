@@ -8,6 +8,7 @@ import useProducts from '../hooks/Products/useProducts';
 import { useCart } from '../hooks/Cart/useCart';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import ReceiptModal from '../components/ReceiptModal';
+import QuantityModal from '../components/QuantityModal';
 
 const useStyles = createUseStyles({
   page: {
@@ -257,6 +258,9 @@ const ProductList = () => {
   const [receiptData, setReceiptData] = useState(null);
   const [showReceipt, setShowReceipt] = useState(false);
 
+  const [quantityModalOpen, setQuantityModalOpen] = useState(false);
+  const [selectedBuyProduct, setSelectedBuyProduct] = useState(null);
+
   const currentUser = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem('user'));
@@ -318,7 +322,7 @@ const ProductList = () => {
     toast.success('Produk ditambahkan ke keranjang');
   };
 
-  const handleBuyDirect = async (product) => {
+  const handleBuyDirectClick = (product) => {
     if (product.stock <= 0) {
       toast.error('Stok habis!');
       return;
@@ -331,18 +335,32 @@ const ProductList = () => {
       return;
     }
 
+    setSelectedBuyProduct(product);
+    setQuantityModalOpen(true);
+  };
+
+  const handleBuyDirect = async (quantity) => {
+    if (!selectedBuyProduct) return;
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.token) {
+      toast.error('Silakan login terlebih dahulu');
+      navigate('/login');
+      return;
+    }
+
     const toastId = toast.loading('Memproses transaksi...');
 
     try {
       const cleanPrice = parseFloat(
-        String(product.price).replace(/[^0-9]/g, ''),
+        String(selectedBuyProduct.price).replace(/[^0-9]/g, ''),
       );
       const payload = {
         items: [
           {
-            id: product.id || product._id,
-            quantity: 1,
-            name: product.name,
+            id: selectedBuyProduct.id || selectedBuyProduct._id,
+            quantity: quantity,
+            name: selectedBuyProduct.name,
             price: cleanPrice,
           },
         ],
@@ -354,6 +372,8 @@ const ProductList = () => {
 
       setReceiptData(response.data);
       setShowReceipt(true);
+      setQuantityModalOpen(false);
+      setSelectedBuyProduct(null);
       toast.success('Pembelian Berhasil!', { id: toastId });
       refetch();
     } catch (error) {
@@ -437,7 +457,7 @@ const ProductList = () => {
                       <span
                         className={`${classes.badge} ${classes.badgePublic}`}
                       >
-                        🌍 Public
+                        🌐 Public
                       </span>
                     ) : (
                       <span
@@ -489,7 +509,7 @@ const ProductList = () => {
                       </button>
 
                       <button
-                        onClick={() => handleBuyDirect(product)}
+                        onClick={() => handleBuyDirectClick(product)}
                         disabled={product.stock <= 0}
                         className={`${classes.actionBtn} ${classes.btnBuy}`}
                       >
@@ -543,6 +563,16 @@ const ProductList = () => {
         title={t.list.confirmTitle}
         message={t.list.confirmMsg}
         data={selectedProduct}
+      />
+
+      <QuantityModal
+        isOpen={quantityModalOpen}
+        onClose={() => {
+          setQuantityModalOpen(false);
+          setSelectedBuyProduct(null);
+        }}
+        product={selectedBuyProduct}
+        onConfirm={handleBuyDirect}
       />
 
       {showReceipt && receiptData && (

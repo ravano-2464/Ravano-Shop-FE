@@ -142,6 +142,7 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
   const [loading, setLoading] = useState(false);
 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const IS_PRODUCTION = import.meta.env.VITE_NODE_ENV === 'production';
 
   useEffect(() => {
     const snapUrl = 'https://app.sandbox.midtrans.com/snap/snap.js';
@@ -335,21 +336,25 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
               <CreditCard size={20} />
             </button>
 
-            <button
-              className={classes.submitBtn}
-              onClick={handleManualTopUp}
-              disabled={loading}
-              style={{ backgroundColor: '#059669' }}
-            >
-              {loading ? 'Memproses...' : 'Top Up Manual (Dev)'}
-              <Wallet size={20} />
-            </button>
+            {!IS_PRODUCTION && (
+              <>
+                <button
+                  className={classes.submitBtn}
+                  onClick={handleManualTopUp}
+                  disabled={loading}
+                  style={{ backgroundColor: '#059669' }}
+                >
+                  {loading ? 'Memproses...' : 'Top Up Manual (Dev)'}
+                  <Wallet size={20} />
+                </button>
 
-            <div className={classes.devNote}>
-              <strong>Mode Development:</strong> Jika Midtrans error, gunakan
-              "Top Up Manual" untuk testing. Fitur ini akan dihapus di
-              production.
-            </div>
+                <div className={classes.devNote}>
+                  <strong>Mode Development:</strong> Jika Midtrans error,
+                  gunakan "Top Up Manual" untuk testing. Fitur ini akan dihapus
+                  di production.
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
