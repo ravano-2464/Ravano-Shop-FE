@@ -189,27 +189,83 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
     const cleanAmount = amount.replace(/\D/g, '');
 
     if (!cleanAmount || parseInt(cleanAmount) < 10000) {
-      toast.error('Minimal top up adalah Rp 10.000', {
-        style: {
-          background: '#FEE2E2',
-          color: '#991B1B',
-          fontWeight: '600',
-          border: '1px solid #FCA5A5',
-          borderRadius: '0.75rem',
-          padding: '1rem 1.5rem',
+      toast.error(
+        (t) => (
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+            <span style={{ flex: 1 }}>Minimal top up adalah Rp 10.000</span>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                marginLeft: '0.5rem',
+                color: 'inherit',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <X size={16} />
+            </button>
+          </div>
+        ),
+        {
+          style: {
+            background: '#FEE2E2',
+            color: '#991B1B',
+            fontWeight: '600',
+            border: '1px solid #FCA5A5',
+            borderRadius: '0.75rem',
+            padding: '1rem 1.5rem',
+          },
+          iconTheme: {
+            primary: '#DC2626',
+            secondary: '#FEE2E2',
+          },
+          duration: 5000,
         },
-        iconTheme: {
-          primary: '#DC2626',
-          secondary: '#FEE2E2',
-        },
-        duration: 4000,
-      });
+      );
       return;
     }
 
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user.token) {
-      toast.error('Sesi habis, silakan login ulang.');
+      toast.error(
+        (t) => (
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+            <span style={{ flex: 1 }}>Sesi habis, silakan login ulang.</span>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                marginLeft: '0.5rem',
+                color: 'inherit',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <X size={16} />
+            </button>
+          </div>
+        ),
+        {
+          duration: 5000,
+          style: {
+            background: '#FEE2E2',
+            color: '#991B1B',
+            fontWeight: '600',
+            border: '1px solid #FCA5A5',
+            borderRadius: '0.75rem',
+            padding: '1rem 1.5rem',
+          },
+          iconTheme: {
+            primary: '#DC2626',
+            secondary: '#FEE2E2',
+          },
+        },
+      );
       return;
     }
 
@@ -230,7 +286,27 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
       );
 
       toast.success(
-        `Saldo berhasil ditambahkan: Rp ${parseInt(cleanAmount).toLocaleString('id-ID')}`,
+        (t) => (
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+            <span style={{ flex: 1 }}>
+              {`Saldo berhasil ditambahkan: Rp ${parseInt(cleanAmount).toLocaleString('id-ID')}`}
+            </span>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                marginLeft: '0.5rem',
+                color: 'inherit',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <X size={16} />
+            </button>
+          </div>
+        ),
         {
           style: {
             background: '#D1FAE5',
@@ -244,7 +320,7 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
             primary: '#10B981',
             secondary: '#D1FAE5',
           },
-          duration: 4000,
+          duration: 5000,
         },
       );
       setAmount('');
@@ -254,21 +330,42 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
       if (onClose) onClose();
     } catch (error) {
       const errorMsg = error.response?.data?.error || 'Gagal menambahkan saldo';
-      toast.error(errorMsg, {
-        style: {
-          background: '#FEE2E2',
-          color: '#991B1B',
-          fontWeight: '600',
-          border: '1px solid #FCA5A5',
-          borderRadius: '0.75rem',
-          padding: '1rem 1.5rem',
+      toast.error(
+        (t) => (
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+            <span style={{ flex: 1 }}>{errorMsg}</span>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                marginLeft: '0.5rem',
+                color: 'inherit',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <X size={16} />
+            </button>
+          </div>
+        ),
+        {
+          style: {
+            background: '#FEE2E2',
+            color: '#991B1B',
+            fontWeight: '600',
+            border: '1px solid #FCA5A5',
+            borderRadius: '0.75rem',
+            padding: '1rem 1.5rem',
+          },
+          iconTheme: {
+            primary: '#DC2626',
+            secondary: '#FEE2E2',
+          },
+          duration: 5000,
         },
-        iconTheme: {
-          primary: '#DC2626',
-          secondary: '#FEE2E2',
-        },
-        duration: 4000,
-      });
+      );
       setLoading(false);
     }
   };
@@ -277,27 +374,83 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
     const cleanAmount = amount.replace(/\D/g, '');
 
     if (!cleanAmount || parseInt(cleanAmount) < 10000) {
-      toast.error('Minimal top up adalah Rp 10.000', {
-        style: {
-          background: '#FEE2E2',
-          color: '#991B1B',
-          fontWeight: '600',
-          border: '1px solid #FCA5A5',
-          borderRadius: '0.75rem',
-          padding: '1rem 1.5rem',
+      toast.error(
+        (t) => (
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+            <span style={{ flex: 1 }}>Minimal top up adalah Rp 10.000</span>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                marginLeft: '0.5rem',
+                color: 'inherit',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <X size={16} />
+            </button>
+          </div>
+        ),
+        {
+          style: {
+            background: '#FEE2E2',
+            color: '#991B1B',
+            fontWeight: '600',
+            border: '1px solid #FCA5A5',
+            borderRadius: '0.75rem',
+            padding: '1rem 1.5rem',
+          },
+          iconTheme: {
+            primary: '#DC2626',
+            secondary: '#FEE2E2',
+          },
+          duration: 5000,
         },
-        iconTheme: {
-          primary: '#DC2626',
-          secondary: '#FEE2E2',
-        },
-        duration: 4000,
-      });
+      );
       return;
     }
 
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user.token) {
-      toast.error('Sesi habis, silakan login ulang.');
+      toast.error(
+        (t) => (
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+            <span style={{ flex: 1 }}>Sesi habis, silakan login ulang.</span>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                marginLeft: '0.5rem',
+                color: 'inherit',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <X size={16} />
+            </button>
+          </div>
+        ),
+        {
+          duration: 5000,
+          style: {
+            background: '#FEE2E2',
+            color: '#991B1B',
+            fontWeight: '600',
+            border: '1px solid #FCA5A5',
+            borderRadius: '0.75rem',
+            padding: '1rem 1.5rem',
+          },
+          iconTheme: {
+            primary: '#DC2626',
+            secondary: '#FEE2E2',
+          },
+        },
+      );
       return;
     }
 
@@ -318,21 +471,46 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
       );
 
       if (data && data.redirect_url) {
-        toast.success('Mengalihkan ke halaman pembayaran...', {
-          style: {
-            background: '#DBEAFE',
-            color: '#1E40AF',
-            fontWeight: '600',
-            border: '1px solid #93C5FD',
-            borderRadius: '0.75rem',
-            padding: '1rem 1.5rem',
+        toast.success(
+          (t) => (
+            <div
+              style={{ display: 'flex', alignItems: 'center', width: '100%' }}
+            >
+              <span style={{ flex: 1 }}>
+                Mengalihkan ke halaman pembayaran...
+              </span>
+              <button
+                onClick={() => toast.dismiss(t.id)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  marginLeft: '0.5rem',
+                  color: 'inherit',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <X size={16} />
+              </button>
+            </div>
+          ),
+          {
+            style: {
+              background: '#DBEAFE',
+              color: '#1E40AF',
+              fontWeight: '600',
+              border: '1px solid #93C5FD',
+              borderRadius: '0.75rem',
+              padding: '1rem 1.5rem',
+            },
+            iconTheme: {
+              primary: '#3B82F6',
+              secondary: '#DBEAFE',
+            },
+            duration: 5000,
           },
-          iconTheme: {
-            primary: '#3B82F6',
-            secondary: '#DBEAFE',
-          },
-          duration: 3000,
-        });
+        );
         window.open(data.redirect_url, '_blank');
 
         setTimeout(() => {
@@ -347,102 +525,123 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
         error.response?.data?.error ||
         error.message ||
         'Gagal memproses transaksi';
-      toast.error(errorMsg, {
-        style: {
-          background: '#FEE2E2',
-          color: '#991B1B',
-          fontWeight: '600',
-          border: '1px solid #FCA5A5',
-          borderRadius: '0.75rem',
-          padding: '1rem 1.5rem',
+      toast.error(
+        (t) => (
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+            <span style={{ flex: 1 }}>{errorMsg}</span>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                marginLeft: '0.5rem',
+                color: 'inherit',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <X size={16} />
+            </button>
+          </div>
+        ),
+        {
+          style: {
+            background: '#FEE2E2',
+            color: '#991B1B',
+            fontWeight: '600',
+            border: '1px solid #FCA5A5',
+            borderRadius: '0.75rem',
+            padding: '1rem 1.5rem',
+          },
+          iconTheme: {
+            primary: '#DC2626',
+            secondary: '#FEE2E2',
+          },
+          duration: 5000,
         },
-        iconTheme: {
-          primary: '#DC2626',
-          secondary: '#FEE2E2',
-        },
-        duration: 4000,
-      });
+      );
       setLoading(false);
     }
   };
 
-  if (!isOpen) return null;
-
   return (
     <>
       <Toaster position="top-center" />
-      <div className={classes.overlay}>
-        <div className={classes.modal}>
-          <div className={classes.header}>
-            <div className={classes.title}>
-              <Wallet size={24} />
-              Top Up Saldo
+      {isOpen && (
+        <div className={classes.overlay}>
+          <div className={classes.modal}>
+            <div className={classes.header}>
+              <div className={classes.title}>
+                <Wallet size={24} />
+                Top Up Saldo
+              </div>
+              <button className={classes.closeBtn} onClick={onClose}>
+                <X size={20} />
+              </button>
             </div>
-            <button className={classes.closeBtn} onClick={onClose}>
-              <X size={20} />
-            </button>
-          </div>
 
-          <div className={classes.body}>
-            <div className={classes.label}>Pilih Nominal</div>
-            <div className={classes.grid}>
-              {[20000, 50000, 100000].map((val) => (
-                <button
-                  key={val}
-                  className={classes.amountBtn}
-                  onClick={() => handleQuickAmount(val)}
+            <div className={classes.body}>
+              <div className={classes.label}>Pilih Nominal</div>
+              <div className={classes.grid}>
+                {[20000, 50000, 100000].map((val) => (
+                  <button
+                    key={val}
+                    className={classes.amountBtn}
+                    onClick={() => handleQuickAmount(val)}
+                    disabled={loading}
+                  >
+                    {val / 1000}k
+                  </button>
+                ))}
+              </div>
+
+              <div className={classes.label}>Atau Input Manual</div>
+              <div className={classes.inputGroup}>
+                <span className={classes.currencySymbol}>Rp</span>
+                <input
+                  type="text"
+                  className={classes.input}
+                  value={amount}
+                  onChange={handleAmountChange}
+                  placeholder="0"
                   disabled={loading}
-                >
-                  {val / 1000}k
-                </button>
-              ))}
-            </div>
+                />
+              </div>
 
-            <div className={classes.label}>Atau Input Manual</div>
-            <div className={classes.inputGroup}>
-              <span className={classes.currencySymbol}>Rp</span>
-              <input
-                type="text"
-                className={classes.input}
-                value={amount}
-                onChange={handleAmountChange}
-                placeholder="0"
+              <button
+                className={classes.submitBtn}
+                onClick={handleTopUp}
                 disabled={loading}
-              />
+                style={{ marginBottom: '0.75rem' }}
+              >
+                {loading ? 'Memproses...' : 'Bayar via Midtrans'}
+                <CreditCard size={20} />
+              </button>
+
+              {!IS_PRODUCTION && (
+                <>
+                  <button
+                    className={classes.submitBtn}
+                    onClick={handleManualTopUp}
+                    disabled={loading}
+                    style={{ backgroundColor: '#059669' }}
+                  >
+                    {loading ? 'Memproses...' : 'Top Up Manual (Dev)'}
+                    <Wallet size={20} />
+                  </button>
+
+                  <div className={classes.devNote}>
+                    <strong>Mode Development:</strong> Jika Midtrans error,
+                    gunakan "Top Up Manual" untuk testing. Fitur ini akan
+                    dihapus di production.
+                  </div>
+                </>
+              )}
             </div>
-
-            <button
-              className={classes.submitBtn}
-              onClick={handleTopUp}
-              disabled={loading}
-              style={{ marginBottom: '0.75rem' }}
-            >
-              {loading ? 'Memproses...' : 'Bayar via Midtrans'}
-              <CreditCard size={20} />
-            </button>
-
-            {!IS_PRODUCTION && (
-              <>
-                <button
-                  className={classes.submitBtn}
-                  onClick={handleManualTopUp}
-                  disabled={loading}
-                  style={{ backgroundColor: '#059669' }}
-                >
-                  {loading ? 'Memproses...' : 'Top Up Manual (Dev)'}
-                  <Wallet size={20} />
-                </button>
-
-                <div className={classes.devNote}>
-                  <strong>Mode Development:</strong> Jika Midtrans error,
-                  gunakan "Top Up Manual" untuk testing. Fitur ini akan dihapus
-                  di production.
-                </div>
-              </>
-            )}
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
