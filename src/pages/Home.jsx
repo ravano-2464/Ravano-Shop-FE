@@ -16,6 +16,7 @@ const useStyles = createUseStyles({
     overflow: 'hidden',
   },
   content: {
+    position: 'relative',
     zIndex: 2,
     maxWidth: '1200px',
     width: '100%',
@@ -33,6 +34,8 @@ const useStyles = createUseStyles({
   textSection: {
     flex: 1,
     maxWidth: '600px',
+    position: 'relative',
+    zIndex: 2,
   },
   badge: {
     display: 'inline-flex',
@@ -57,6 +60,7 @@ const useStyles = createUseStyles({
   highlight: {
     color: '#4F46E5',
     position: 'relative',
+    zIndex: 1,
     '&::after': {
       content: '""',
       position: 'absolute',
@@ -120,6 +124,7 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     marginTop: '3rem',
     position: 'relative',
+    zIndex: 1,
     '@media (min-width: 1024px)': {
       marginTop: 0,
       justifyContent: 'flex-end',
@@ -130,6 +135,7 @@ const useStyles = createUseStyles({
     maxWidth: '500px',
     height: 'auto',
     position: 'relative',
+    zIndex: 1,
     '&::before': {
       content: '""',
       position: 'absolute',
@@ -147,6 +153,8 @@ const useStyles = createUseStyles({
     height: 'auto',
     borderRadius: '2rem',
     objectFit: 'cover',
+    position: 'relative',
+    zIndex: 2,
     boxShadow:
       '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
   },
@@ -162,6 +170,7 @@ const useStyles = createUseStyles({
     flexDirection: 'column',
     gap: '0.5rem',
     border: '1px solid #F3F4F6',
+    zIndex: 3,
   },
   statValue: {
     fontSize: '1.5rem',

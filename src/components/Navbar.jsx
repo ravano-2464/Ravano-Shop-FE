@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
-import { ShoppingCart, Wallet, Plus, X } from 'lucide-react';
+import {
+  ShoppingCart,
+  Wallet,
+  Plus,
+  X,
+  ChevronDown,
+  LogOut,
+} from 'lucide-react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import useAuth from '../hooks/Auth/useAuth';
@@ -85,13 +92,67 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     gap: '1rem',
   },
+  userDropdownContainer: {
+    position: 'relative',
+  },
+  userDropdownTrigger: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    cursor: 'pointer',
+    padding: '0.5rem 1rem',
+    backgroundColor: '#F3F4F6',
+    borderRadius: '2rem',
+    border: 'none',
+    transition: 'all 0.2s',
+    '&:hover': {
+      backgroundColor: '#E5E7EB',
+    },
+  },
+  userDropdownMenu: {
+    position: 'absolute',
+    top: '120%',
+    right: 0,
+    backgroundColor: 'white',
+    border: '1px solid #E5E7EB',
+    borderRadius: '0.75rem',
+    padding: '0.5rem',
+    minWidth: '180px',
+    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.25rem',
+    zIndex: 101,
+  },
+  dropdownItem: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.75rem',
+    padding: '0.6rem 0.75rem',
+    borderRadius: '0.5rem',
+    cursor: 'pointer',
+    border: 'none',
+    background: 'transparent',
+    width: '100%',
+    textAlign: 'left',
+    color: '#374151',
+    fontSize: '0.9rem',
+    fontWeight: '500',
+    transition: 'background-color 0.2s',
+    '&:hover': {
+      backgroundColor: '#F3F4F6',
+    },
+  },
+  dropdownItemLogout: {
+    color: '#EF4444',
+    '&:hover': {
+      backgroundColor: '#FEF2F2',
+    },
+  },
   userBadge: {
     fontSize: '0.9rem',
     color: '#374151',
     fontWeight: '600',
-    padding: '0.5rem 1rem',
-    backgroundColor: '#F3F4F6',
-    borderRadius: '2rem',
   },
   btn: {
     padding: '0.6rem 1.25rem',
@@ -203,8 +264,23 @@ const Navbar = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [balance, setBalance] = useState(0);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsUserDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchBalance = async () => {
@@ -215,7 +291,7 @@ const Navbar = () => {
         });
         setBalance(data.balance || 0);
       } catch (error) {
-        console.error('Error fetching balance:', error);
+        console.error(error);
       }
     };
 
@@ -246,7 +322,7 @@ const Navbar = () => {
         });
         setBalance(data.balance || 0);
       } catch (error) {
-        console.error('Error fetching balance:', error);
+        console.error(error);
       }
     };
 
@@ -261,6 +337,7 @@ const Navbar = () => {
   const handleLogoutConfirm = () => {
     logoutUser();
     setIsLogoutModalOpen(false);
+    setIsUserDropdownOpen(false);
 
     toast.success(
       (t) => (
@@ -370,17 +447,29 @@ const Navbar = () => {
 
           <div className={classes.authSection}>
             {user ? (
-              <>
-                <span className={classes.userBadge}>
-                  {t.nav.greeting}, {user.name}
-                </span>
+              <div className={classes.userDropdownContainer} ref={dropdownRef}>
                 <button
-                  onClick={handleLogoutClick}
-                  className={`${classes.btn} ${classes.btnLogout}`}
+                  className={classes.userDropdownTrigger}
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
                 >
-                  {t.nav.logout}
+                  <span className={classes.userBadge}>
+                    {t.nav.greeting}, {user.name}
+                  </span>
+                  <ChevronDown size={16} color="#6B7280" />
                 </button>
-              </>
+
+                {isUserDropdownOpen && (
+                  <div className={classes.userDropdownMenu}>
+                    <button
+                      onClick={handleLogoutClick}
+                      className={`${classes.dropdownItem} ${classes.dropdownItemLogout}`}
+                    >
+                      <LogOut size={16} />
+                      {t.nav.logout}
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <Link
                 to="/login"
@@ -481,14 +570,22 @@ const Navbar = () => {
             <>
               <div
                 className={classes.userBadge}
-                style={{ textAlign: 'center' }}
+                style={{ textAlign: 'center', marginBottom: '0.5rem' }}
               >
                 {t.nav.greeting}, {user.name}
               </div>
               <button
                 onClick={handleLogoutClick}
                 className={`${classes.btn} ${classes.btnLogout}`}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                }}
               >
+                <LogOut size={16} />
                 {t.nav.logout}
               </button>
             </>
