@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
-import { ShoppingCart, Wallet, Plus } from 'lucide-react';
+import { ShoppingCart, Wallet, Plus, X } from 'lucide-react';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 import useAuth from '../hooks/Auth/useAuth';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../hooks/Cart/useCart';
@@ -260,7 +261,47 @@ const Navbar = () => {
   const handleLogoutConfirm = () => {
     logoutUser();
     setIsLogoutModalOpen(false);
-    navigate('/login');
+
+    toast.success(
+      (t) => (
+        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+          <span style={{ flex: 1 }}>Logout Berhasil! Sampai jumpa lagi.</span>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              marginLeft: '0.5rem',
+              color: 'inherit',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <X size={16} />
+          </button>
+        </div>
+      ),
+      {
+        duration: 5000,
+        style: {
+          background: '#D1FAE5',
+          color: '#065F46',
+          fontWeight: '600',
+          border: '1px solid #6EE7B7',
+          borderRadius: '0.75rem',
+          padding: '1rem 1.5rem',
+        },
+        iconTheme: {
+          primary: '#10B981',
+          secondary: '#D1FAE5',
+        },
+      },
+    );
+
+    setTimeout(() => {
+      navigate('/login');
+    }, 5000);
   };
 
   const handleLogoutClick = () => {
@@ -276,6 +317,7 @@ const Navbar = () => {
 
   return (
     <>
+      <Toaster position="top-center" />
       <nav className={classes.navbar}>
         <Link to="/" className={classes.brand}>
           <span className={classes.brandIcon}>🛒</span>
