@@ -164,7 +164,6 @@ const useProducts = (id = null) => {
       const config = { headers: getAuthHeader() };
       await axios.delete(`${API_URL}/${productId}`, config);
       await fetchProducts();
-      toast.success('Produk berhasil dihapus!', { id: loadingToast });
     } catch (err) {
       setError(err.message);
       toast.error('Gagal menghapus produk: ' + err.response?.data?.error, {

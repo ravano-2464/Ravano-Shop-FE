@@ -393,7 +393,7 @@ const ProductList = () => {
       const toastId = toast.loading('Menghapus produk...');
       try {
         await deleteProduct(selectedProduct.id || selectedProduct._id);
-        toast.success('Produk berhasil dihapus', { id: toastId });
+        toast.success('Produk berhasil dihapus!', { id: toastId });
         refetch();
       } catch {
         toast.error('Gagal menghapus produk', { id: toastId });
