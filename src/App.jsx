@@ -13,6 +13,7 @@ import ProductList from './pages/ProductList';
 import ProductForm from './pages/ProductForm';
 import ProductEdit from './pages/ProductEdit';
 import ProductDetail from './pages/ProductDetail';
+import DashboardMonitoring from './pages/DashboardMonitoring';
 import NotFound from './pages/NotFound';
 
 LogRocket.init('xuiyty/ravano-shop');
@@ -54,6 +55,10 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />
+                <Route
+                  path="/dashboard-monitoring"
+                  element={<DashboardMonitoring />}
+                />
                 <Route path="/list-products" element={<ProductList />} />
                 <Route path="/add-products" element={<ProductForm />} />
                 <Route path="/edit/products/:id" element={<ProductEdit />} />

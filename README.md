@@ -38,7 +38,7 @@ Pastikan Anda sudah menginstal:
 
 1.  **Clone Repositori**
     ```bash
-    git clone [https://github.com/ravano-2464/Ravano-Shop.git](https://github.com/ravano-2464/Ravano-Shop.git)
+    git clone [https://github.com/ravano-2464/Ravano-Shop-FE.git](https://github.com/ravano-2464/Ravano-Shop-FE.git)
     cd Ravano-Shop
     ```
 
