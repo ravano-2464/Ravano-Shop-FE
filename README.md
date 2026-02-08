@@ -64,18 +64,61 @@ Pastikan Anda sudah menginstal:
 ## 📂 Struktur Folder
 
 ```text
-Ravano-Shop/
-├── public/          # Aset statis (favicon, images, dll)
-├── src/             # Source code utama
-│   ├── assets/      # Gambar, font, style global
-│   ├── components/  # Komponen React yang dapat digunakan kembali
-│   ├── pages/       # Halaman utama aplikasi
-│   ├── App.jsx      # Komponen root utama
-│   └── main.jsx     # Entry point aplikasi
-├── .eslintrc.json   # Konfigurasi Linter
-├── package.json     # Daftar dependencies dan script
-├── vite.config.js   # Konfigurasi Vite
-└── README.md        # Dokumentasi proyek
+├── 📁 .qodo
+│   ├── 📁 agents
+│   └── 📁 workflows
+├── 📁 public
+│   └── 🖼️ vite.svg
+├── 📁 src
+│   ├── 📁 assets
+│   │   └── 🖼️ react.svg
+│   ├── 📁 components
+│   │   ├── 📄 CartModal.jsx
+│   │   ├── 📄 DeleteConfirmationModal.jsx
+│   │   ├── 📄 Footer.jsx
+│   │   ├── 📄 Layout.jsx
+│   │   ├── 📄 LogoutConfirmationModal.jsx
+│   │   ├── 📄 Navbar.jsx
+│   │   ├── 📄 ProtectedRoute.jsx
+│   │   ├── 📄 QuantityModal.jsx
+│   │   ├── 📄 ReceiptModal.jsx
+│   │   └── 📄 TopUpModal.jsx
+│   ├── 📁 context
+│   │   ├── 📄 AuthContext.jsx
+│   │   ├── 📄 CartContext.jsx
+│   │   └── 📄 LanguageContext.jsx
+│   ├── 📁 hooks
+│   │   ├── 📁 Auth
+│   │   │   └── 📄 useAuth.js
+│   │   ├── 📁 Cart
+│   │   │   └── 📄 useCart.js
+│   │   └── 📁 Products
+│   │       └── 📄 useProducts.js
+│   ├── 📁 pages
+│   │   ├── 📄 DashboardMonitoring.jsx
+│   │   ├── 📄 Home.jsx
+│   │   ├── 📄 Login.jsx
+│   │   ├── 📄 NotFound.jsx
+│   │   ├── 📄 ProductDetail.jsx
+│   │   ├── 📄 ProductEdit.jsx
+│   │   ├── 📄 ProductForm.jsx
+│   │   ├── 📄 ProductList.jsx
+│   │   └── 📄 Register.jsx
+│   ├── 🎨 App.css
+│   ├── 📄 App.jsx
+│   ├── 🎨 index.css
+│   ├── 📄 main.jsx
+│   └── 📄 theme.js
+├── ⚙️ .eslintrc.json
+├── ⚙️ .gitignore
+├── ⚙️ .prettierrc
+├── 📝 README.md
+├── 📄 eslint.config.js
+├── 🌐 index.html
+├── ⚙️ package-lock.json
+├── ⚙️ package.json
+├── ⚙️ vercel.json
+└── 📄 vite.config.js
 ````
 
 ## 🤝 Kontribusi
