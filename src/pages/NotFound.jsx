@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
+import { useLanguage } from '../context/LanguageContext';
 
 const useStyles = createUseStyles({
   wrapper: {
@@ -178,28 +179,28 @@ const useStyles = createUseStyles({
 const NotFound = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   return (
     <div className={classes.wrapper}>
       <div className={classes.content}>
         <div className={classes.textSection}>
           <div className={classes.badge}>
-            <span>404 Error</span>
+            <span>{t.notFound.badge}</span>
           </div>
           <h1 className={classes.title}>
-            Halaman <br />
-            <span className={classes.highlight}>Tidak Ditemukan</span>
+            {t.notFound.titleLine1} <br />
+            <span className={classes.highlight}>{t.notFound.titleHighlight}</span>
           </h1>
           <p className={classes.description}>
-            Maaf, halaman yang Anda cari tidak dapat ditemukan. Mungkin telah
-            dipindahkan atau dihapus.
+            {t.notFound.description}
           </p>
           <div className={classes.buttonGroup}>
             <button
               onClick={() => navigate('/')}
               className={classes.primaryBtn}
             >
-              Kembali ke Beranda
+              {t.notFound.backBtn}
             </button>
           </div>
         </div>
@@ -213,7 +214,7 @@ const NotFound = () => {
             />
             <div className={classes.statsBox}>
               <span className={classes.statValue}>404</span>
-              <span className={classes.statLabel}>Status Code</span>
+              <span className={classes.statLabel}>{t.notFound.statsLabel}</span>
             </div>
           </div>
         </div>

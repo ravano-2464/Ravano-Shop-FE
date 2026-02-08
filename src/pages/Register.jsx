@@ -4,6 +4,7 @@ import { User, Mail, Lock, X, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useLanguage } from '../context/LanguageContext';
 
 const useStyles = createUseStyles({
   container: {
@@ -111,6 +112,7 @@ const useStyles = createUseStyles({
 const Register = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -215,8 +217,8 @@ const Register = () => {
     <div className={classes.container}>
       <div className={classes.card}>
         <div className={classes.header}>
-          <h1 className={classes.title}>Buat Akun</h1>
-          <p className={classes.subtitle}>Mulai perjalanan belanja Anda</p>
+          <h1 className={classes.title}>{t.auth.registerTitle}</h1>
+          <p className={classes.subtitle}>{t.auth.registerSubtitle}</p>
         </div>
 
         <form onSubmit={handleRegister} className={classes.form}>
@@ -225,7 +227,7 @@ const Register = () => {
             <input
               type="text"
               name="name"
-              placeholder="Nama Lengkap"
+              placeholder={t.auth.namePlaceholder}
               className={classes.input}
               value={formData.name}
               onChange={handleChange}
@@ -238,7 +240,7 @@ const Register = () => {
             <input
               type="email"
               name="email"
-              placeholder="Email Address"
+              placeholder={t.auth.emailPlaceholder}
               className={classes.input}
               value={formData.email}
               onChange={handleChange}
@@ -251,7 +253,7 @@ const Register = () => {
             <input
               type="password"
               name="password"
-              placeholder="Password"
+              placeholder={t.auth.passwordLabel}
               className={classes.input}
               value={formData.password}
               onChange={handleChange}
@@ -263,18 +265,18 @@ const Register = () => {
             {loading ? (
               <>
                 <Loader2 size={20} className="animate-spin" />
-                Memproses...
+                {t.auth.signingUpBtn}
               </>
             ) : (
-              'Daftar Sekarang'
+              <>{t.auth.signUpBtn}</>
             )}
           </button>
         </form>
 
         <div className={classes.footer}>
-          Sudah punya akun?{' '}
+          {t.auth.hasAccount}{' '}
           <Link to="/login" className={classes.link}>
-            Login disini
+            {t.auth.linkLogin}
           </Link>
         </div>
       </div>

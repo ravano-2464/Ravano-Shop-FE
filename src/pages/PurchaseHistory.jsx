@@ -3,6 +3,7 @@ import { createUseStyles } from 'react-jss';
 import { ShoppingBag, Package, Calendar, CreditCard, ChevronDown, ChevronUp } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useLanguage } from '../context/LanguageContext';
 
 const useStyles = createUseStyles({
   page: {
@@ -222,6 +223,7 @@ const useStyles = createUseStyles({
 
 const PurchaseHistory = () => {
   const classes = useStyles();
+  const { t } = useLanguage();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedIds, setExpandedIds] = useState([]);
@@ -245,7 +247,7 @@ const PurchaseHistory = () => {
       setTransactions(response.data || []);
     } catch (error) {
       console.error('Failed to fetch transactions:', error);
-      toast.error('Gagal memuat riwayat pembelian', { id: 'fetch-history-error' });
+      toast.error(t.history.fetchError, { id: 'fetch-history-error' });
     } finally {
       setLoading(false);
     }
@@ -283,7 +285,7 @@ const PurchaseHistory = () => {
       <div className={classes.page}>
         <div className={classes.container}>
           <div className={classes.loadingState}>
-            <p>Memuat riwayat pembelian...</p>
+            <p>{t.history.loading}</p>
           </div>
         </div>
       </div>
@@ -296,10 +298,10 @@ const PurchaseHistory = () => {
         <div className={classes.header}>
           <h1 className={classes.title}>
             <ShoppingBag size={32} />
-            Riwayat Pembelian
+            {t.history.title}
           </h1>
           <p className={classes.subtitle}>
-            Lihat semua transaksi dan produk yang telah Anda beli
+            {t.history.subtitle}
           </p>
         </div>
 
@@ -310,7 +312,7 @@ const PurchaseHistory = () => {
             </div>
             <div className={classes.statInfo}>
               <div className={classes.statValue}>{transactions.length}</div>
-              <div className={classes.statLabel}>Total Transaksi</div>
+              <div className={classes.statLabel}>{t.history.totalTransactions}</div>
             </div>
           </div>
           <div className={classes.statCard}>
@@ -319,7 +321,7 @@ const PurchaseHistory = () => {
             </div>
             <div className={classes.statInfo}>
               <div className={classes.statValue}>Rp {formatPrice(totalSpent)}</div>
-              <div className={classes.statLabel}>Total Pengeluaran</div>
+              <div className={classes.statLabel}>{t.history.totalSpent}</div>
             </div>
           </div>
           <div className={classes.statCard}>
@@ -328,7 +330,7 @@ const PurchaseHistory = () => {
             </div>
             <div className={classes.statInfo}>
               <div className={classes.statValue}>{totalItems}</div>
-              <div className={classes.statLabel}>Produk Dibeli</div>
+              <div className={classes.statLabel}>{t.history.productsBought}</div>
             </div>
           </div>
         </div>
@@ -338,9 +340,9 @@ const PurchaseHistory = () => {
             <div className={classes.emptyIcon}>
               <ShoppingBag size={40} />
             </div>
-            <h3 className={classes.emptyTitle}>Belum Ada Transaksi</h3>
+            <h3 className={classes.emptyTitle}>{t.history.noTransactions}</h3>
             <p className={classes.emptyText}>
-              Anda belum melakukan pembelian apapun. Mulai belanja sekarang!
+              {t.history.noTransactionsDesc}
             </p>
           </div>
         ) : (
@@ -367,7 +369,7 @@ const PurchaseHistory = () => {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                       <div className={classes.transactionTotal}>
-                        <div className={classes.totalLabel}>Total</div>
+                        <div className={classes.totalLabel}>{t.history.total}</div>
                         <div className={classes.totalValue}>
                           Rp {formatPrice(transaction.totalAmount)}
                         </div>
@@ -391,7 +393,7 @@ const PurchaseHistory = () => {
                           <div className={classes.itemInfo}>
                             <div className={classes.itemName}>{item.name}</div>
                             <div className={classes.itemMeta}>
-                              Qty: {item.quantity} × Rp {formatPrice(item.price)}
+                            {t.history.qty}: {item.quantity} × Rp {formatPrice(item.price)}
                             </div>
                           </div>
                           <div className={classes.itemPrice}>
