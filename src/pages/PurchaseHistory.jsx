@@ -272,7 +272,7 @@ const PurchaseHistory = () => {
     return Number(price).toLocaleString('id-ID');
   };
 
-  const totalSpent = transactions.reduce((acc, t) => acc + (t.total || 0), 0);
+  const totalSpent = transactions.reduce((acc, t) => acc + (t.totalAmount || 0), 0);
   const totalItems = transactions.reduce(
     (acc, t) => acc + (t.items?.length || 0),
     0
@@ -369,7 +369,7 @@ const PurchaseHistory = () => {
                       <div className={classes.transactionTotal}>
                         <div className={classes.totalLabel}>Total</div>
                         <div className={classes.totalValue}>
-                          Rp {formatPrice(transaction.total)}
+                          Rp {formatPrice(transaction.totalAmount)}
                         </div>
                       </div>
                       <button className={classes.expandBtn}>
@@ -383,7 +383,7 @@ const PurchaseHistory = () => {
                       {transaction.items?.map((item, idx) => (
                         <div key={idx} className={classes.itemCard}>
                           <img
-                            src={item.imageUrl || 'https://placehold.co/60?text=No+Image'}
+                            src={item.product?.imageUrl || 'https://placehold.co/60?text=No+Image'}
                             alt={item.name}
                             className={classes.itemImage}
                             onError={(e) => (e.target.src = 'https://placehold.co/60?text=No+Image')}
