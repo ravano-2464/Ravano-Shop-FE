@@ -17,7 +17,7 @@ const useStyles = createUseStyles({
     padding: '2rem 1rem',
   },
   container: {
-    maxWidth: '1280px',
+    maxWidth: '100%',
     margin: '0 auto',
   },
   header: {

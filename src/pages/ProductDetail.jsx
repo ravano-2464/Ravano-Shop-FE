@@ -25,7 +25,7 @@ const useStyles = createUseStyles({
   container: {
     backgroundColor: 'white',
     width: '100%',
-    maxWidth: '1100px',
+    maxWidth: '100%',
     borderRadius: '1.5rem',
     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)',
     overflow: 'hidden',
