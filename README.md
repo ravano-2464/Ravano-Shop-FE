@@ -46,6 +46,7 @@
 
 ## 📂 Struktur Folder
 
+<<<<<<< HEAD
 ```
 frontend/
 ├── public/             # Aset statis
@@ -132,6 +133,65 @@ frontend/
 | `npm run build` | Build untuk production |
 | `npm run preview` | Preview production build |
 | `npm run lint` | Jalankan ESLint |
+=======
+```text
+├── 📁 .qodo
+│   ├── 📁 agents
+│   └── 📁 workflows
+├── 📁 public
+│   └── 🖼️ vite.svg
+├── 📁 src
+│   ├── 📁 assets
+│   │   └── 🖼️ react.svg
+│   ├── 📁 components
+│   │   ├── 📄 CartModal.jsx
+│   │   ├── 📄 DeleteConfirmationModal.jsx
+│   │   ├── 📄 Footer.jsx
+│   │   ├── 📄 Layout.jsx
+│   │   ├── 📄 LogoutConfirmationModal.jsx
+│   │   ├── 📄 Navbar.jsx
+│   │   ├── 📄 ProtectedRoute.jsx
+│   │   ├── 📄 QuantityModal.jsx
+│   │   ├── 📄 ReceiptModal.jsx
+│   │   └── 📄 TopUpModal.jsx
+│   ├── 📁 context
+│   │   ├── 📄 AuthContext.jsx
+│   │   ├── 📄 CartContext.jsx
+│   │   └── 📄 LanguageContext.jsx
+│   ├── 📁 hooks
+│   │   ├── 📁 Auth
+│   │   │   └── 📄 useAuth.js
+│   │   ├── 📁 Cart
+│   │   │   └── 📄 useCart.js
+│   │   └── 📁 Products
+│   │       └── 📄 useProducts.js
+│   ├── 📁 pages
+│   │   ├── 📄 DashboardMonitoring.jsx
+│   │   ├── 📄 Home.jsx
+│   │   ├── 📄 Login.jsx
+│   │   ├── 📄 NotFound.jsx
+│   │   ├── 📄 ProductDetail.jsx
+│   │   ├── 📄 ProductEdit.jsx
+│   │   ├── 📄 ProductForm.jsx
+│   │   ├── 📄 ProductList.jsx
+│   │   └── 📄 Register.jsx
+│   ├── 🎨 App.css
+│   ├── 📄 App.jsx
+│   ├── 🎨 index.css
+│   ├── 📄 main.jsx
+│   └── 📄 theme.js
+├── ⚙️ .eslintrc.json
+├── ⚙️ .gitignore
+├── ⚙️ .prettierrc
+├── 📝 README.md
+├── 📄 eslint.config.js
+├── 🌐 index.html
+├── ⚙️ package-lock.json
+├── ⚙️ package.json
+├── ⚙️ vercel.json
+└── 📄 vite.config.js
+````
+>>>>>>> f90d98dbc380b0c8bbcf49e783ffbf0d5aa80dd5
 
 ## 🤝 Kontribusi
 
