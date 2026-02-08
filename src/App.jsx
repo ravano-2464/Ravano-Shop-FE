@@ -13,6 +13,7 @@ import ProductList from './pages/ProductList';
 import ProductForm from './pages/ProductForm';
 import ProductEdit from './pages/ProductEdit';
 import ProductDetail from './pages/ProductDetail';
+import PurchaseHistory from './pages/PurchaseHistory';
 import DashboardMonitoring from './pages/DashboardMonitoring';
 import NotFound from './pages/NotFound';
 
@@ -65,6 +66,10 @@ function App() {
                 <Route
                   path="/detail-products/:id"
                   element={<ProductDetail />}
+                />
+                <Route
+                  path="/purchase-history"
+                  element={<PurchaseHistory />}
                 />
               </Route>
             </Route>

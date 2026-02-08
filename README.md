@@ -1,95 +1,158 @@
-# Ravano Shop 🛒
+# 🛒 Ravano Shop
 
-## 📖 Deskripsi
+<div align="center">
+  
+[![React](https://img.shields.io/badge/React-18.x-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-**Ravano Shop** adalah aplikasi web E-Commerce modern yang dibangun menggunakan library **React** dan build tool **Vite**. Proyek ini difokuskan pada pengembangan antarmuka pengguna (Front-End) yang responsif, cepat, dan interaktif untuk pengalaman berbelanja online yang mulus.
+**Aplikasi E-Commerce Modern dengan React + Vite**
 
-## 🚀 Teknologi yang Digunakan
+[Demo Live](https://ravano-shop.vercel.app) • [Dokumentasi](#-instalasi--cara-menjalankan) • [Kontribusi](#-kontribusi)
 
-Proyek ini dibangun menggunakan teknologi utama berikut:
+</div>
 
-* **[React](https://reactjs.org/)** - Library JavaScript untuk membangun antarmuka pengguna.
-* **[Vite](https://vitejs.dev/)** - Build tool frontend generasi berikutnya yang super cepat.
-* **JavaScript (ES6+)** - Bahasa pemrograman utama.
-* **CSS / Styling** - (Dapat disesuaikan: Misalnya CSS Modules, Tailwind, atau Styled Components).
-* **ESLint** - Untuk menjaga kualitas dan konsistensi kode.
+---
+
+## 📖 Tentang Project
+
+**Ravano Shop** adalah aplikasi web E-Commerce modern yang dibangun dengan **React** dan **Vite**. Fokus pada pengalaman pengguna yang responsif, cepat, dan interaktif untuk berbelanja online.
+
+## 🚀 Tech Stack
+
+| Teknologi | Deskripsi |
+|-----------|-----------|
+| ⚛️ **React** | Library JavaScript untuk UI |
+| ⚡ **Vite** | Build tool super cepat |
+| 🎨 **React-JSS** | CSS-in-JS styling |
+| 🔄 **React Router** | Client-side routing |
+| 🔥 **React Hot Toast** | Notifikasi modern |
+| 📊 **Axios** | HTTP client |
+| 🔍 **LogRocket** | Session replay & monitoring |
 
 ## ✨ Fitur Utama
 
-Berikut adalah beberapa fitur yang tersedia dalam aplikasi ini:
-
-* ✅ **Katalog Produk** - Menampilkan daftar produk dengan gambar dan harga.
-* ✅ **Detail Produk** - Halaman informasi lengkap untuk setiap item.
-* ✅ **Keranjang Belanja (Cart)** - Menambah dan mengelola item belanjaan.
-* ✅ **Responsif** - Tampilan yang optimal di Desktop, Tablet, dan Mobile.
-* ✅ **Navigasi Cepat** - Menggunakan routing sisi klien (SPA).
-
-## 🛠️ Instalasi & Cara Menjalankan
-
-Ikuti langkah-langkah di bawah ini untuk menjalankan proyek ini di komputer lokal Anda:
-
-### Prasyarat
-
-Pastikan Anda sudah menginstal:
-* [Node.js](https://nodejs.org/) (Versi 16 atau lebih baru direkomendasikan)
-* npm atau yarn
-
-### Langkah-langkah
-
-1.  **Clone Repositori**
-    ```bash
-    git clone [https://github.com/ravano-2464/Ravano-Shop-FE.git](https://github.com/ravano-2464/Ravano-Shop-FE.git)
-    cd Ravano-Shop
-    ```
-
-2.  **Instal Dependencies**
-    Masuk ke direktori proyek dan instal paket yang dibutuhkan:
-    ```bash
-    npm install
-    # atau jika menggunakan yarn
-    yarn install
-    ```
-
-3.  **Jalankan Server Development**
-    Mulai aplikasi dalam mode development:
-    ```bash
-    npm run dev
-    # atau
-    yarn dev
-    ```
-
-4.  **Buka di Browser**
-    Aplikasi biasanya akan berjalan di `http://localhost:5173`. Cek terminal Anda untuk port yang tepat.
+- ✅ **Katalog Produk** - Menampilkan daftar produk dengan gambar, harga, dan stok
+- ✅ **Detail Produk** - Halaman informasi lengkap untuk setiap produk
+- ✅ **Keranjang Belanja** - Tambah produk ke keranjang dan kelola item belanjaan
+- ✅ **Checkout Langsung** - Beli produk secara langsung dengan modal konfirmasi
+- ✅ **Riwayat Pembelian** - Lihat semua transaksi dan produk yang telah dibeli
+- ✅ **CRUD Produk** - Tambah, edit, dan hapus produk (untuk pemilik)
+- ✅ **Dashboard Monitoring** - Pantau aktivitas dan statistik
+- ✅ **Autentikasi** - Login & Register dengan JWT
+- ✅ **Multi-bahasa** - Dukungan bahasa Indonesia & English
+- ✅ **Top Up Saldo** - Isi ulang saldo untuk berbelanja
+- ✅ **Responsif** - Optimal di Desktop, Tablet, dan Mobile
 
 ## 📂 Struktur Folder
 
-```text
-Ravano-Shop/
-├── public/          # Aset statis (favicon, images, dll)
-├── src/             # Source code utama
-│   ├── assets/      # Gambar, font, style global
-│   ├── components/  # Komponen React yang dapat digunakan kembali
-│   ├── pages/       # Halaman utama aplikasi
-│   ├── App.jsx      # Komponen root utama
-│   └── main.jsx     # Entry point aplikasi
-├── .eslintrc.json   # Konfigurasi Linter
-├── package.json     # Daftar dependencies dan script
-├── vite.config.js   # Konfigurasi Vite
-└── README.md        # Dokumentasi proyek
-````
+```
+frontend/
+├── public/             # Aset statis
+├── src/
+│   ├── assets/         # Gambar dan style
+│   ├── components/     # Komponen reusable
+│   │   ├── CartModal.jsx
+│   │   ├── DeleteConfirmationModal.jsx
+│   │   ├── Footer.jsx
+│   │   ├── Layout.jsx
+│   │   ├── LogoutConfirmationModal.jsx
+│   │   ├── Navbar.jsx
+│   │   ├── ProtectedRoute.jsx
+│   │   ├── QuantityModal.jsx
+│   │   ├── ReceiptModal.jsx
+│   │   └── TopUpModal.jsx
+│   ├── context/        # React Context
+│   │   ├── AuthContext.jsx
+│   │   ├── CartContext.jsx
+│   │   └── LanguageContext.jsx
+│   ├── hooks/          # Custom Hooks
+│   │   ├── Auth/
+│   │   ├── Cart/
+│   │   └── Products/
+│   ├── pages/          # Halaman aplikasi
+│   │   ├── Home.jsx
+│   │   ├── Login.jsx
+│   │   ├── Register.jsx
+│   │   ├── ProductList.jsx
+│   │   ├── ProductDetail.jsx
+│   │   ├── ProductForm.jsx
+│   │   ├── ProductEdit.jsx
+│   │   ├── PurchaseHistory.jsx
+│   │   ├── DashboardMonitoring.jsx
+│   │   └── NotFound.jsx
+│   ├── App.jsx         # Root component
+│   └── main.jsx        # Entry point
+├── .env                # Environment variables
+├── package.json        # Dependencies
+└── vite.config.js      # Vite configuration
+```
+
+## 🛠️ Instalasi & Cara Menjalankan
+
+### Prasyarat
+
+- [Node.js](https://nodejs.org/) v16+
+- npm atau yarn
+
+### Langkah-langkah
+
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/ravano-2464/Ravano-Shop-FE.git
+   cd Ravano-Shop-FE
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Konfigurasi Environment**
+   
+   Buat file `.env` di root folder:
+   ```env
+   VITE_API_BASE_URL=https://api.example.com
+   ```
+
+4. **Jalankan Development Server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Buka Browser**
+   
+   Akses aplikasi di `http://localhost:5173`
+
+## 📜 Scripts
+
+| Script | Deskripsi |
+|--------|-----------|
+| `npm run dev` | Jalankan development server |
+| `npm run build` | Build untuk production |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Jalankan ESLint |
 
 ## 🤝 Kontribusi
 
-Kontribusi selalu diterima\! Jika Anda ingin berkontribusi:
+Kontribusi selalu diterima! Ikuti langkah berikut:
 
-1.  Fork repositori ini.
-2.  Buat branch fitur baru (`git checkout -b fitur-keren`).
-3.  Commit perubahan Anda (`git commit -m 'Menambahkan fitur keren'`).
-4.  Push ke branch tersebut (`git push origin fitur-keren`).
-5.  Buat Pull Request.
+1. Fork repository ini
+2. Buat branch fitur: `git checkout -b fitur-baru`
+3. Commit perubahan: `git commit -m 'Tambah fitur baru'`
+4. Push ke branch: `git push origin fitur-baru`
+5. Buat Pull Request
 
 ## 📝 Lisensi
 
-Proyek ini dilisensikan di bawah [MIT License](https://www.google.com/search?q=LICENSE).
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).
 
-Dibuat dengan ❤️ oleh [Ravano-2464](https://www.google.com/search?q=https://github.com/ravano-2464)
+---
+
+<div align="center">
+  
+Dibuat dengan ❤️ oleh [Ravano-2464](https://github.com/ravano-2464)
+
+⭐ Star repository ini jika bermanfaat!
+
+</div>

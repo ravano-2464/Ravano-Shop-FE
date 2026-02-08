@@ -319,18 +319,18 @@ const ProductList = () => {
       price: isNaN(cleanPrice) ? 0 : cleanPrice,
     };
     addToCart(productToAdd);
-    toast.success('Produk ditambahkan ke keranjang');
+    toast.success('Produk ditambahkan ke keranjang', { id: 'cart-added' });
   };
 
   const handleBuyDirectClick = (product) => {
     if (product.stock <= 0) {
-      toast.error('Stok habis!');
+      toast.error('Stok habis!', { id: 'stock-empty' });
       return;
     }
 
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user.token) {
-      toast.error('Silakan login terlebih dahulu');
+      toast.error('Silakan login terlebih dahulu', { id: 'login-required' });
       navigate('/login');
       return;
     }
@@ -344,7 +344,7 @@ const ProductList = () => {
 
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user.token) {
-      toast.error('Silakan login terlebih dahulu');
+      toast.error('Silakan login terlebih dahulu', { id: 'login-required' });
       navigate('/login');
       return;
     }

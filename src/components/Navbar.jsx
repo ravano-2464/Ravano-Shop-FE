@@ -10,7 +10,7 @@ import {
   LogOut,
 } from 'lucide-react';
 import axios from 'axios';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import useAuth from '../hooks/Auth/useAuth';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../hooks/Cart/useCart';
@@ -258,7 +258,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { user, logoutUser } = useAuth();
   const { toggleLanguage, language, t } = useLanguage();
-  const { totalItems, cartItems, removeFromCart } = useCart();
+  const { totalItems, cartItems, removeFromCart, clearCart } = useCart();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -390,11 +390,11 @@ const Navbar = () => {
     { label: t.nav.home, path: '/' },
     { label: t.nav.catalog, path: '/list-products' },
     { label: t.nav.add, path: '/add-products' },
+    { label: 'Riwayat', path: '/purchase-history' },
   ];
 
   return (
     <>
-      <Toaster position="top-center" />
       <nav className={classes.navbar}>
         <Link to="/" className={classes.brand}>
           <span className={classes.brandIcon}>🛒</span>
@@ -494,6 +494,7 @@ const Navbar = () => {
         onClose={() => setIsCartOpen(false)}
         items={cartItems}
         onRemove={removeFromCart}
+        onClearCart={clearCart}
       />
 
       <TopUpModal

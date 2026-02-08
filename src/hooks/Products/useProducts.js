@@ -63,7 +63,7 @@ const useProducts = (id = null) => {
     } catch (err) {
       setError(err.message);
       setProducts([]);
-      toast.error('Gagal memuat daftar produk');
+      toast.error('Gagal memuat daftar produk', { id: 'fetch-products-error' });
     } finally {
       setLoading(false);
     }
@@ -94,7 +94,7 @@ const useProducts = (id = null) => {
     } catch (err) {
       setError(err.message);
       setProductDetail(null);
-      toast.error('Gagal memuat detail produk');
+      toast.error('Gagal memuat detail produk', { id: 'fetch-detail-error' });
     } finally {
       setLoading(false);
     }
@@ -123,7 +123,7 @@ const useProducts = (id = null) => {
 
   const updateProduct = async (productId, productData) => {
     if (!productId) {
-      toast.error('ID produk tidak valid');
+      toast.error('ID produk tidak valid', { id: 'invalid-product-id' });
       return;
     }
 
@@ -153,7 +153,7 @@ const useProducts = (id = null) => {
 
   const deleteProduct = async (productId) => {
     if (!productId) {
-      toast.error('ID produk tidak valid');
+      toast.error('ID produk tidak valid', { id: 'invalid-product-id' });
       return;
     }
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { createUseStyles } from 'react-jss';
 import { X, Wallet, CreditCard } from 'lucide-react';
 import axios from 'axios';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const useStyles = createUseStyles({
   overlay: {
@@ -567,7 +567,6 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
 
   return (
     <>
-      <Toaster position="top-center" />
       {isOpen && (
         <div className={classes.overlay}>
           <div className={classes.modal}>

@@ -1,7 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
+import { ShoppingCart } from 'lucide-react';
 import useProducts from '../hooks/Products/useProducts';
+import { useCart } from '../hooks/Cart/useCart';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import QuantityModal from '../components/QuantityModal';
@@ -221,6 +223,18 @@ const useStyles = createUseStyles({
     color: '#6B7280',
     cursor: 'not-allowed',
   },
+  btnCart: {
+    backgroundColor: '#4F46E5',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#4338CA',
+      transform: 'translateY(-2px)',
+    },
+    '&:disabled': {
+      opacity: 0.7,
+      cursor: 'not-allowed',
+    },
+  },
   secondaryBtn: {
     padding: '1rem',
     borderRadius: '0.75rem',
@@ -243,6 +257,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const classes = useStyles();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const { productDetail, loading, refetch, t } = useProducts(id);
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -286,13 +301,13 @@ const ProductDetail = () => {
 
   const handleOrderClick = () => {
     if (productDetail.stock <= 0) {
-      toast.error('Stok habis!');
+      toast.error('Stok habis!', { id: 'stock-empty' });
       return;
     }
 
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user.token) {
-      toast.error('Silakan login terlebih dahulu');
+      toast.error('Silakan login terlebih dahulu', { id: 'login-required' });
       navigate('/login');
       return;
     }
@@ -300,10 +315,25 @@ const ProductDetail = () => {
     setQuantityModalOpen(true);
   };
 
+  const handleAddToCart = () => {
+    if (productDetail.stock <= 0) {
+      toast.error('Stok habis!', { id: 'stock-empty' });
+      return;
+    }
+
+    const cleanPrice = parseFloat(String(productDetail.price).replace(/[^0-9]/g, ''));
+    const productToAdd = {
+      ...productDetail,
+      price: isNaN(cleanPrice) ? 0 : cleanPrice,
+    };
+    addToCart(productToAdd);
+    toast.success('Produk ditambahkan ke keranjang', { id: 'cart-added' });
+  };
+
   const handleOrder = async (quantity) => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user.token) {
-      toast.error('Silakan login terlebih dahulu');
+      toast.error('Silakan login terlebih dahulu', { id: 'login-required' });
       navigate('/login');
       return;
     }
@@ -403,6 +433,15 @@ const ProductDetail = () => {
           </div>
 
           <div className={classes.actions}>
+            <button
+              onClick={handleAddToCart}
+              disabled={productDetail.stock <= 0}
+              className={`${classes.orderBtn} ${classes.btnCart}`}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+            >
+              <ShoppingCart size={20} />
+              Tambahkan ke Keranjang
+            </button>
             <button
               onClick={handleOrderClick}
               disabled={productDetail.stock <= 0}

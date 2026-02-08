@@ -3,7 +3,7 @@ import { createUseStyles } from 'react-jss';
 import { User, Mail, Lock, X, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const useStyles = createUseStyles({
   container: {
@@ -213,7 +213,6 @@ const Register = () => {
 
   return (
     <div className={classes.container}>
-      <Toaster position="top-center" />
       <div className={classes.card}>
         <div className={classes.header}>
           <h1 className={classes.title}>Buat Akun</h1>

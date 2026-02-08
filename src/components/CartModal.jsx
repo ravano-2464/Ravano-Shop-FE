@@ -194,7 +194,7 @@ const useStyles = createUseStyles({
   },
 });
 
-const CartModal = ({ isOpen, onClose, items = [], onRemove }) => {
+const CartModal = ({ isOpen, onClose, items = [], onRemove, onClearCart }) => {
   const classes = useStyles();
   const [selectedIds, setSelectedIds] = useState([]);
   const [receiptData, setReceiptData] = useState(null);
@@ -231,13 +231,13 @@ const CartModal = ({ isOpen, onClose, items = [], onRemove }) => {
 
   const handleCheckout = async () => {
     if (selectedItems.length === 0) {
-      toast.error('Pilih produk yang ingin di-checkout');
+      toast.error('Pilih produk yang ingin di-checkout', { id: 'select-product' });
       return;
     }
 
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || !user.token) {
-      toast.error('Silakan login terlebih dahulu');
+      toast.error('Silakan login terlebih dahulu', { id: 'login-required' });
       return;
     }
 
@@ -260,9 +260,9 @@ const CartModal = ({ isOpen, onClose, items = [], onRemove }) => {
       setReceiptData(response.data);
       setShowReceipt(true);
 
-      selectedItems.forEach((item) => {
-        onRemove(item.id || item._id);
-      });
+      if (onClearCart) {
+        onClearCart();
+      }
       setSelectedIds([]);
 
       toast.success('Pembelian Berhasil!', { id: toastId });
