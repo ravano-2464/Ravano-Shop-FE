@@ -176,14 +176,31 @@ const useStyles = createUseStyles({
     '&:hover': { backgroundColor: '#FEF2F2' },
   },
   langBtn: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
     backgroundColor: 'white',
     border: '1px solid #E5E7EB',
     color: '#374151',
-    padding: '0.5rem',
-    borderRadius: '0.5rem',
+    padding: '0.5rem 1rem',
+    borderRadius: '2rem',
     cursor: 'pointer',
-    fontSize: '1.2rem',
-    '&:hover': { backgroundColor: '#F9FAFB' },
+    fontSize: '0.9rem',
+    fontWeight: '600',
+    transition: 'all 0.2s',
+    minWidth: '90px',
+    justifyContent: 'center',
+    '&:hover': { backgroundColor: '#F9FAFB', transform: 'translateY(-1px)' },
+  },
+  langFlag: {
+    width: '20px',
+    height: '14px',
+    objectFit: 'cover',
+    borderRadius: '2px',
+    boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+  },
+  langText: {
+    textAlign: 'center',
   },
   cartBtn: {
     display: 'flex',
@@ -442,7 +459,12 @@ const Navbar = () => {
             className={classes.langBtn}
             title={t.nav.language}
           >
-            {language === 'id' ? '🇮🇩' : '🇺🇸'}
+            <img 
+              src={language === 'id' ? 'https://flagcdn.com/w40/id.png' : 'https://flagcdn.com/w40/us.png'}
+              alt={language === 'id' ? 'Indonesia' : 'English'}
+              className={classes.langFlag}
+            />
+            <span className={classes.langText}>{language === 'id' ? 'ID' : 'EN'}</span>
           </button>
 
           <div className={classes.authSection}>
@@ -559,7 +581,12 @@ const Navbar = () => {
             }}
           >
             <button onClick={toggleLanguage} className={classes.langBtn}>
-              {t.nav.language} {language === 'id' ? '🇮🇩' : '🇺🇸'}
+              <img 
+                src={language === 'id' ? 'https://flagcdn.com/w40/id.png' : 'https://flagcdn.com/w40/us.png'}
+                alt={language === 'id' ? 'Indonesia' : 'English'}
+                className={classes.langFlag}
+              />
+              <span className={classes.langText}>{language === 'id' ? 'Indonesia' : 'English'}</span>
             </button>
           </div>
 
