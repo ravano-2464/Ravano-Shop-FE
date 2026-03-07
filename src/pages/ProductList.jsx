@@ -11,6 +11,10 @@ import ReceiptModal from '../components/ReceiptModal';
 import QuantityModal from '../components/QuantityModal';
 
 const useStyles = createUseStyles({
+  '@keyframes skeletonShimmer': {
+    '0%': { backgroundPosition: '200% 0' },
+    '100%': { backgroundPosition: '-200% 0' },
+  },
   page: {
     backgroundColor: '#F9FAFB',
     minHeight: '100vh',
@@ -241,6 +245,78 @@ const useStyles = createUseStyles({
     borderRadius: '1rem',
     border: '2px dashed #E5E7EB',
   },
+  skeletonBase: {
+    background: 'linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 37%, #F3F4F6 63%)',
+    backgroundSize: '400% 100%',
+    animation: '$skeletonShimmer 1.4s ease infinite',
+    borderRadius: '0.6rem',
+  },
+  skeletonTitle: {
+    height: '36px',
+    width: '240px',
+    marginBottom: '0.5rem',
+  },
+  skeletonSubtitle: {
+    height: '18px',
+    width: '320px',
+    maxWidth: '90%',
+  },
+  skeletonAddButton: {
+    height: '46px',
+    width: '180px',
+  },
+  skeletonInput: {
+    height: '44px',
+    width: '100%',
+  },
+  skeletonCard: {
+    backgroundColor: 'white',
+    borderRadius: '1rem',
+    overflow: 'hidden',
+    border: '1px solid #E5E7EB',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  skeletonImage: {
+    height: '240px',
+    borderRadius: 0,
+  },
+  skeletonCardContent: {
+    padding: '1.5rem',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.75rem',
+    flex: 1,
+  },
+  skeletonName: {
+    height: '22px',
+    width: '65%',
+  },
+  skeletonMeta: {
+    height: '14px',
+    width: '50%',
+  },
+  skeletonPrice: {
+    height: '24px',
+    width: '45%',
+  },
+  skeletonDesc: {
+    height: '14px',
+    width: '100%',
+  },
+  skeletonDescShort: {
+    height: '14px',
+    width: '72%',
+  },
+  skeletonActions: {
+    display: 'flex',
+    gap: '0.5rem',
+    marginTop: 'auto',
+  },
+  skeletonActionBtn: {
+    height: '40px',
+    flex: 1,
+  },
 });
 
 const ProductList = () => {
@@ -401,7 +477,47 @@ const ProductList = () => {
     setModalOpen(false);
   };
 
-  if (loading) return <div className="p-10 text-center">{t.list.loading}</div>;
+  if (loading) {
+    return (
+      <div className={classes.page}>
+        <div className={classes.container}>
+          <div className={classes.header}>
+            <div className={classes.titleGroup}>
+              <div className={`${classes.skeletonBase} ${classes.skeletonTitle}`} />
+              <div className={`${classes.skeletonBase} ${classes.skeletonSubtitle}`} />
+            </div>
+            <div className={`${classes.skeletonBase} ${classes.skeletonAddButton}`} />
+          </div>
+
+          <div className={classes.controls}>
+            <div className={`${classes.skeletonBase} ${classes.skeletonInput}`} />
+            <div className={`${classes.skeletonBase} ${classes.skeletonInput}`} />
+            <div className={`${classes.skeletonBase} ${classes.skeletonInput}`} />
+          </div>
+
+          <div className={classes.grid}>
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className={classes.skeletonCard}>
+                <div className={`${classes.skeletonBase} ${classes.skeletonImage}`} />
+                <div className={classes.skeletonCardContent}>
+                  <div className={`${classes.skeletonBase} ${classes.skeletonName}`} />
+                  <div className={`${classes.skeletonBase} ${classes.skeletonMeta}`} />
+                  <div className={`${classes.skeletonBase} ${classes.skeletonMeta}`} />
+                  <div className={`${classes.skeletonBase} ${classes.skeletonPrice}`} />
+                  <div className={`${classes.skeletonBase} ${classes.skeletonDesc}`} />
+                  <div className={`${classes.skeletonBase} ${classes.skeletonDescShort}`} />
+                  <div className={classes.skeletonActions}>
+                    <div className={`${classes.skeletonBase} ${classes.skeletonActionBtn}`} />
+                    <div className={`${classes.skeletonBase} ${classes.skeletonActionBtn}`} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={classes.page}>
