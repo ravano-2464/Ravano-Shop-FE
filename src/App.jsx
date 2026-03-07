@@ -56,21 +56,12 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />
-                <Route
-                  path="/dashboard-monitoring"
-                  element={<DashboardMonitoring />}
-                />
+                <Route path="/dashboard-monitoring" element={<DashboardMonitoring />} />
                 <Route path="/list-products" element={<ProductList />} />
                 <Route path="/add-products" element={<ProductForm />} />
                 <Route path="/edit/products/:id" element={<ProductEdit />} />
-                <Route
-                  path="/detail-products/:id"
-                  element={<ProductDetail />}
-                />
-                <Route
-                  path="/purchase-history"
-                  element={<PurchaseHistory />}
-                />
+                <Route path="/detail-products/:id" element={<ProductDetail />} />
+                <Route path="/purchase-history" element={<PurchaseHistory />} />
               </Route>
             </Route>
 

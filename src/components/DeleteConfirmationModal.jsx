@@ -24,8 +24,7 @@ const useStyles = createUseStyles({
     width: '90%',
     maxWidth: '400px',
     padding: '1.5rem',
-    boxShadow:
-      '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
     transform: 'scale(0.95)',
     animation: '$scaleIn 0.2s 0.1s forwards',
     position: 'relative',
@@ -71,7 +70,7 @@ const useStyles = createUseStyles({
     color: '#6B7280',
     lineHeight: '1.5',
     margin: 0,
-  },  
+  },
   previewBox: {
     backgroundColor: '#F9FAFB',
     border: '1px solid #E5E7EB',
@@ -139,23 +138,14 @@ const useStyles = createUseStyles({
   },
 });
 
-const DeleteConfirmationModal = ({
-  isOpen,
-  onClose,
-  onConfirm,
-  title,
-  message,
-  data,
-}) => {
+const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, data }) => {
   const classes = useStyles();
 
   if (!isOpen) return null;
 
   // Helper untuk format harga
   const formatPrice = (price) => {
-    return price
-      ? parseInt(String(price).replace(/\D/g, '') || 0).toLocaleString('id-ID')
-      : '0';
+    return price ? parseInt(String(price).replace(/\D/g, '') || 0).toLocaleString('id-ID') : '0';
   };
 
   return (
@@ -186,24 +176,16 @@ const DeleteConfirmationModal = ({
               />
               <div className={classes.previewInfo}>
                 <span className={classes.previewName}>{data.name}</span>
-                <span className={classes.previewPrice}>
-                  Rp {formatPrice(data.price)}
-                </span>
+                <span className={classes.previewPrice}>Rp {formatPrice(data.price)}</span>
               </div>
             </div>
           )}
 
           <div className={classes.actions}>
-            <button
-              className={`${classes.btn} ${classes.btnCancel}`}
-              onClick={onClose}
-            >
+            <button className={`${classes.btn} ${classes.btnCancel}`} onClick={onClose}>
               Batal
             </button>
-            <button
-              className={`${classes.btn} ${classes.btnConfirm}`}
-              onClick={onConfirm}
-            >
+            <button className={`${classes.btn} ${classes.btnConfirm}`} onClick={onConfirm}>
               Hapus Produk
             </button>
           </div>

@@ -258,12 +258,8 @@ const QuantityModal = ({ isOpen, onClose, product, onConfirm }) => {
             />
             <div className={classes.productDetails}>
               <div className={classes.productName}>{product.name}</div>
-              <div className={classes.productPrice}>
-                Rp {price.toLocaleString('id-ID')}
-              </div>
-              <div className={classes.productStock}>
-                Stok tersedia: {maxStock}
-              </div>
+              <div className={classes.productPrice}>Rp {price.toLocaleString('id-ID')}</div>
+              <div className={classes.productStock}>Stok tersedia: {maxStock}</div>
             </div>
           </div>
 
@@ -291,9 +287,7 @@ const QuantityModal = ({ isOpen, onClose, product, onConfirm }) => {
           <div className={classes.totalSection}>
             <div className={classes.totalRow}>
               <span className={classes.totalLabel}>Harga Satuan</span>
-              <span className={classes.totalValue}>
-                Rp {price.toLocaleString('id-ID')}
-              </span>
+              <span className={classes.totalValue}>Rp {price.toLocaleString('id-ID')}</span>
             </div>
             <div className={classes.totalRow}>
               <span className={classes.totalLabel}>Jumlah</span>
@@ -301,9 +295,7 @@ const QuantityModal = ({ isOpen, onClose, product, onConfirm }) => {
             </div>
             <div className={`${classes.totalRow} ${classes.totalFinal}`}>
               <span className={classes.totalFinalLabel}>Total Bayar</span>
-              <span className={classes.totalFinalValue}>
-                Rp {total.toLocaleString('id-ID')}
-              </span>
+              <span className={classes.totalFinalValue}>Rp {total.toLocaleString('id-ID')}</span>
             </div>
           </div>
 

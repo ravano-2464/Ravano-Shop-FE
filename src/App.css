@@ -18,7 +18,9 @@ body {
   flex-direction: column;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 

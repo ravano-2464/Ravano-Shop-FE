@@ -1,14 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
-import {
-  ShoppingCart,
-  Wallet,
-  Plus,
-  X,
-  ChevronDown,
-  LogOut,
-} from 'lucide-react';
+import { ShoppingCart, Wallet, Plus, X, ChevronDown, LogOut } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import useAuth from '../hooks/Auth/useAuth';
@@ -46,8 +39,7 @@ const useStyles = createUseStyles({
   },
   brandIcon: { fontSize: '1.75rem' },
   brandText: {
-    background:
-      'linear-gradient(90deg, #111827, #4F46E5, #7C3AED, #EC4899, #4F46E5, #111827)',
+    background: 'linear-gradient(90deg, #111827, #4F46E5, #7C3AED, #EC4899, #4F46E5, #111827)',
     backgroundSize: '200% auto',
     '-webkit-background-clip': 'text',
     '-webkit-text-fill-color': 'transparent',
@@ -390,7 +382,7 @@ const Navbar = () => {
           primary: '#10B981',
           secondary: '#D1FAE5',
         },
-      },
+      }
     );
 
     setTimeout(() => {
@@ -436,31 +428,24 @@ const Navbar = () => {
               title="Top Up Saldo"
             >
               <Wallet size={18} />
-              <span className={classes.walletBalance}>
-                Rp {balance.toLocaleString('id-ID')}
-              </span>
+              <span className={classes.walletBalance}>Rp {balance.toLocaleString('id-ID')}</span>
               <Plus size={14} strokeWidth={3} />
             </button>
           )}
 
-          <button
-            className={classes.cartBtn}
-            onClick={() => setIsCartOpen(true)}
-          >
+          <button className={classes.cartBtn} onClick={() => setIsCartOpen(true)}>
             <ShoppingCart size={18} />
             <span>{t.nav.cart}</span>
-            {totalItems > 0 && (
-              <span className={classes.cartBadge}>{totalItems}</span>
-            )}
+            {totalItems > 0 && <span className={classes.cartBadge}>{totalItems}</span>}
           </button>
 
-          <button
-            onClick={toggleLanguage}
-            className={classes.langBtn}
-            title={t.nav.language}
-          >
-            <img 
-              src={language === 'id' ? 'https://flagcdn.com/w40/id.png' : 'https://flagcdn.com/w40/us.png'}
+          <button onClick={toggleLanguage} className={classes.langBtn} title={t.nav.language}>
+            <img
+              src={
+                language === 'id'
+                  ? 'https://flagcdn.com/w40/id.png'
+                  : 'https://flagcdn.com/w40/us.png'
+              }
               alt={language === 'id' ? 'Indonesia' : 'English'}
               className={classes.langFlag}
             />
@@ -493,20 +478,14 @@ const Navbar = () => {
                 )}
               </div>
             ) : (
-              <Link
-                to="/login"
-                className={`${classes.btn} ${classes.btnLogin}`}
-              >
+              <Link to="/login" className={`${classes.btn} ${classes.btnLogin}`}>
                 {t.nav.login}
               </Link>
             )}
           </div>
         </div>
 
-        <button
-          className={classes.mobileMenuBtn}
-          onClick={() => setIsMobileOpen(!isMobileOpen)}
-        >
+        <button className={classes.mobileMenuBtn} onClick={() => setIsMobileOpen(!isMobileOpen)}>
           {isMobileOpen ? '✕' : '☰'}
         </button>
       </nav>
@@ -581,18 +560,22 @@ const Navbar = () => {
             }}
           >
             <button onClick={toggleLanguage} className={classes.langBtn}>
-              <img 
-                src={language === 'id' ? 'https://flagcdn.com/w40/id.png' : 'https://flagcdn.com/w40/us.png'}
+              <img
+                src={
+                  language === 'id'
+                    ? 'https://flagcdn.com/w40/id.png'
+                    : 'https://flagcdn.com/w40/us.png'
+                }
                 alt={language === 'id' ? 'Indonesia' : 'English'}
                 className={classes.langFlag}
               />
-              <span className={classes.langText}>{language === 'id' ? 'Indonesia' : 'English'}</span>
+              <span className={classes.langText}>
+                {language === 'id' ? 'Indonesia' : 'English'}
+              </span>
             </button>
           </div>
 
-          <div
-            style={{ height: '1px', background: '#E5E7EB', margin: '0.5rem 0' }}
-          />
+          <div style={{ height: '1px', background: '#E5E7EB', margin: '0.5rem 0' }} />
 
           {user ? (
             <>

@@ -106,8 +106,7 @@ const useStyles = createUseStyles({
     color: 'white',
     padding: '1rem 1.5rem',
     borderRadius: '0.5rem',
-    boxShadow:
-      '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
     zIndex: 9999,
     display: 'flex',
     alignItems: 'center',
@@ -178,10 +177,7 @@ const Login = () => {
       {error && (
         <div className={classes.notification}>
           <span>{error}</span>
-          <button
-            onClick={() => setError(null)}
-            className={classes.closeButton}
-          >
+          <button onClick={() => setError(null)} className={classes.closeButton}>
             ✕
           </button>
         </div>
@@ -214,11 +210,7 @@ const Login = () => {
               placeholder="••••••••"
             />
           </div>
-          <button
-            type="submit"
-            className={classes.button}
-            disabled={isSubmitting}
-          >
+          <button type="submit" className={classes.button} disabled={isSubmitting}>
             {isSubmitting ? t.auth.signingInBtn : t.auth.signInBtn}
           </button>
         </form>

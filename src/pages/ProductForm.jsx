@@ -263,8 +263,7 @@ const ProductForm = () => {
 
               <div className={classes.inputGroup}>
                 <label className={classes.label}>
-                  {t.form.visibilityLabel}{' '}
-                  <span className={classes.requiredStar}>*</span>
+                  {t.form.visibilityLabel} <span className={classes.requiredStar}>*</span>
                 </label>
                 <select
                   name="visibility"
@@ -304,9 +303,7 @@ const ProductForm = () => {
               <div className={classes.previewLabel}>{t.form.preview}</div>
               <div className={classes.imageBox}>
                 {!formData.imageUrl ? (
-                  <span className={classes.placeholder}>
-                    {t.form.imagePreview}
-                  </span>
+                  <span className={classes.placeholder}>{t.form.imagePreview}</span>
                 ) : (
                   <>
                     {imgState.loading && <div className={classes.spinner} />}
@@ -318,23 +315,16 @@ const ProductForm = () => {
                       alt="Preview"
                       className={classes.previewImg}
                       style={{
-                        display:
-                          imgState.loading || imgState.error ? 'none' : 'block',
+                        display: imgState.loading || imgState.error ? 'none' : 'block',
                       }}
-                      onLoad={() =>
-                        setImgState({ loading: false, error: false })
-                      }
-                      onError={() =>
-                        setImgState({ loading: false, error: true })
-                      }
+                      onLoad={() => setImgState({ loading: false, error: false })}
+                      onError={() => setImgState({ loading: false, error: true })}
                     />
                   </>
                 )}
               </div>
               <h3>{formData.name || 'Product Name'}</h3>
-              <p style={{ color: '#4F46E5', fontWeight: 'bold' }}>
-                Rp {formData.price || '0'}
-              </p>
+              <p style={{ color: '#4F46E5', fontWeight: 'bold' }}>Rp {formData.price || '0'}</p>
               <div
                 style={{
                   marginTop: '0.5rem',
@@ -355,10 +345,7 @@ const ProductForm = () => {
             >
               {t.form.cancel}
             </button>
-            <button
-              type="submit"
-              className={`${classes.btn} ${classes.btnSubmit}`}
-            >
+            <button type="submit" className={`${classes.btn} ${classes.btnSubmit}`}>
               {t.form.submit}
             </button>
           </div>

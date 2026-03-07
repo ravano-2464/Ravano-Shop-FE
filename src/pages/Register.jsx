@@ -21,8 +21,7 @@ const useStyles = createUseStyles({
     maxWidth: '400px',
     padding: '2rem',
     borderRadius: '1.5rem',
-    boxShadow:
-      '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
   },
   header: {
     textAlign: 'center',
@@ -166,7 +165,7 @@ const Register = () => {
             primary: '#10B981',
             secondary: '#D1FAE5',
           },
-        },
+        }
       );
 
       navigate('/login');
@@ -206,7 +205,7 @@ const Register = () => {
             primary: '#DC2626',
             secondary: '#FEE2E2',
           },
-        },
+        }
       );
     } finally {
       setLoading(false);

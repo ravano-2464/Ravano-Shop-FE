@@ -151,8 +151,8 @@ const Footer = () => {
             <span>🛒</span> Ravano Shop
           </div>
           <p className={classes.desc}>
-            Platform manajemen toko terbaik untuk bisnis modern. Kelola produk,
-            stok, dan penjualan dengan mudah dalam satu aplikasi.
+            Platform manajemen toko terbaik untuk bisnis modern. Kelola produk, stok, dan penjualan
+            dengan mudah dalam satu aplikasi.
           </p>
           <div className={classes.socials}>
             {socialLinks.map((social) => (

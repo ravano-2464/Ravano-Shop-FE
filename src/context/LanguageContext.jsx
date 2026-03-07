@@ -70,8 +70,7 @@ const translations = {
       buySuccess: 'Purchase successful!',
       outOfStock: 'Out of Stock',
       confirmTitle: 'Delete Product',
-      confirmMsg:
-        'Are you sure you want to delete this product? This action cannot be undone.',
+      confirmMsg: 'Are you sure you want to delete this product? This action cannot be undone.',
       loading: 'Loading...',
       price: 'Price',
     },
@@ -84,8 +83,7 @@ const translations = {
       loading: 'Loading details...',
       stock: 'Stock',
       notFound: 'Product Not Found',
-      notFoundDesc:
-        'The product you are looking for does not exist or has been removed.',
+      notFoundDesc: 'The product you are looking for does not exist or has been removed.',
     },
     form: {
       titleAdd: 'Create New Product',

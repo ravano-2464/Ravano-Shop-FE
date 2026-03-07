@@ -143,8 +143,7 @@ const useStyles = createUseStyles({
     height: 'auto',
     borderRadius: '2rem',
     objectFit: 'cover',
-    boxShadow:
-      '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
     filter: 'grayscale(20%)',
   },
   statsBox: {
@@ -192,14 +191,9 @@ const NotFound = () => {
             {t.notFound.titleLine1} <br />
             <span className={classes.highlight}>{t.notFound.titleHighlight}</span>
           </h1>
-          <p className={classes.description}>
-            {t.notFound.description}
-          </p>
+          <p className={classes.description}>{t.notFound.description}</p>
           <div className={classes.buttonGroup}>
-            <button
-              onClick={() => navigate('/')}
-              className={classes.primaryBtn}
-            >
+            <button onClick={() => navigate('/')} className={classes.primaryBtn}>
               {t.notFound.backBtn}
             </button>
           </div>

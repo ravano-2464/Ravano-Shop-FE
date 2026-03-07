@@ -132,11 +132,7 @@ const useProducts = (id = null) => {
       setLoading(true);
       setError(null);
       const config = { headers: getAuthHeader() };
-      const response = await axios.put(
-        `${API_URL}/${productId}`,
-        productData,
-        config,
-      );
+      const response = await axios.put(`${API_URL}/${productId}`, productData, config);
       await fetchProducts();
       toast.success('Produk berhasil diperbarui!', { id: loadingToast });
       return response.data;
@@ -181,16 +177,9 @@ const useProducts = (id = null) => {
     try {
       setLoading(true);
       const config = { headers: getAuthHeader() };
-      const response = await axios.post(
-        `${API_URL}/${productId}/buy`,
-        {},
-        config,
-      );
+      const response = await axios.post(`${API_URL}/${productId}/buy`, {}, config);
 
-      if (
-        productDetail &&
-        (productDetail.id === productId || productDetail._id === productId)
-      ) {
+      if (productDetail && (productDetail.id === productId || productDetail._id === productId)) {
         setProductDetail({
           ...response.data,
           id: response.data._id || response.data.id,
@@ -201,12 +190,9 @@ const useProducts = (id = null) => {
       toast.success(t.list.buySuccess, { id: loadingToast });
       return response.data;
     } catch (err) {
-      toast.error(
-        'Gagal membeli: ' + (err.response?.data?.error || err.message),
-        {
-          id: loadingToast,
-        },
-      );
+      toast.error('Gagal membeli: ' + (err.response?.data?.error || err.message), {
+        id: loadingToast,
+      });
     } finally {
       setLoading(false);
     }
@@ -214,13 +200,7 @@ const useProducts = (id = null) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !formData.name ||
-      !formData.price ||
-      !formData.imageUrl ||
-      !formData.stock
-    )
-      return;
+    if (!formData.name || !formData.price || !formData.imageUrl || !formData.stock) return;
 
     const rawPrice = String(formData.price).replace(/\D/g, '');
     const rawStock = String(formData.stock).replace(/\D/g, '');

@@ -23,8 +23,7 @@ const useStyles = createUseStyles({
     borderRadius: '1rem',
     width: '90%',
     maxWidth: '400px',
-    boxShadow:
-      '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
     textAlign: 'center',
     transform: 'scale(1)',
     animation: '$scaleIn 0.2s ease',
@@ -95,16 +94,10 @@ const LogoutConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
         <h2 className={classes.title}>{t.nav.logoutConfirmTitle}</h2>
         <p className={classes.message}>{t.nav.logoutConfirmMsg}</p>
         <div className={classes.actions}>
-          <button
-            className={`${classes.btn} ${classes.btnCancel}`}
-            onClick={onClose}
-          >
+          <button className={`${classes.btn} ${classes.btnCancel}`} onClick={onClose}>
             {t.common.cancel}
           </button>
-          <button
-            className={`${classes.btn} ${classes.btnConfirm}`}
-            onClick={onConfirm}
-          >
+          <button className={`${classes.btn} ${classes.btnConfirm}`} onClick={onConfirm}>
             {t.nav.logout}
           </button>
         </div>

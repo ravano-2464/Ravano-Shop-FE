@@ -511,16 +511,11 @@ const DashboardMonitoring = () => {
             <div
               key={index}
               className={classes.statCard}
-              onClick={() =>
-                trackEvent('Dashboard', 'click_stat', stat.label, 1)
-              }
+              onClick={() => trackEvent('Dashboard', 'click_stat', stat.label, 1)}
             >
               <div className={classes.statHeader}>
                 <span className={classes.statLabel}>{stat.label}</span>
-                <div
-                  className={classes.statIconWrapper}
-                  style={{ backgroundColor: stat.bgColor }}
-                >
+                <div className={classes.statIconWrapper} style={{ backgroundColor: stat.bgColor }}>
                   <Icon size={24} color={stat.color} />
                 </div>
               </div>
@@ -528,11 +523,7 @@ const DashboardMonitoring = () => {
               <div
                 className={`${classes.statChange} ${stat.change >= 0 ? classes.positive : classes.negative}`}
               >
-                {stat.change >= 0 ? (
-                  <ArrowUp size={16} />
-                ) : (
-                  <ArrowDown size={16} />
-                )}
+                {stat.change >= 0 ? <ArrowUp size={16} /> : <ArrowDown size={16} />}
                 {Math.abs(stat.change)}% dari bulan lalu
               </div>
             </div>
@@ -544,9 +535,7 @@ const DashboardMonitoring = () => {
         <div className={classes.chartCard}>
           <div className={classes.chartHeader}>
             <h3 className={classes.chartTitle}>Aktivitas Mingguan</h3>
-            <p className={classes.chartSubtitle}>
-              Distribusi aktivitas per hari dalam seminggu
-            </p>
+            <p className={classes.chartSubtitle}>Distribusi aktivitas per hari dalam seminggu</p>
           </div>
           <div className={classes.barChart}>
             {revenueData.map((item, index) => (
@@ -554,9 +543,7 @@ const DashboardMonitoring = () => {
                 <div
                   className={classes.bar}
                   style={{ height: `${(item.value / maxValue) * 80}%` }}
-                  onClick={() =>
-                    trackEvent('Chart', 'click_bar', item.label, item.value)
-                  }
+                  onClick={() => trackEvent('Chart', 'click_bar', item.label, item.value)}
                 >
                   <span className={classes.barValue}>{item.value}</span>
                 </div>
@@ -569,9 +556,7 @@ const DashboardMonitoring = () => {
         <div className={classes.chartCard}>
           <div className={classes.chartHeader}>
             <h3 className={classes.chartTitle}>Perangkat Pengguna</h3>
-            <p className={classes.chartSubtitle}>
-              Distribusi pengguna berdasarkan perangkat
-            </p>
+            <p className={classes.chartSubtitle}>Distribusi pengguna berdasarkan perangkat</p>
           </div>
           <div>
             {deviceData.map((device, index) => {
@@ -580,9 +565,7 @@ const DashboardMonitoring = () => {
                 <div
                   key={index}
                   className={classes.deviceCard}
-                  onClick={() =>
-                    trackEvent('Device', 'click', device.name, device.value)
-                  }
+                  onClick={() => trackEvent('Device', 'click', device.name, device.value)}
                 >
                   <div
                     className={classes.deviceIcon}
@@ -592,9 +575,7 @@ const DashboardMonitoring = () => {
                   </div>
                   <div className={classes.deviceInfo}>
                     <div className={classes.deviceName}>{device.name}</div>
-                    <div className={classes.deviceStat}>
-                      {device.value}% dari total pengunjung
-                    </div>
+                    <div className={classes.deviceStat}>{device.value}% dari total pengunjung</div>
                     <div className={classes.progressBar}>
                       <div
                         className={classes.progressFill}
@@ -615,9 +596,7 @@ const DashboardMonitoring = () => {
       <div className={classes.tableCard}>
         <div className={classes.chartHeader}>
           <h3 className={classes.chartTitle}>Produk Terpopuler</h3>
-          <p className={classes.chartSubtitle}>
-            Berdasarkan tayangan dan konversi
-          </p>
+          <p className={classes.chartSubtitle}>Berdasarkan tayangan dan konversi</p>
         </div>
         <table className={classes.table}>
           <thead className={classes.tableHeader}>
@@ -631,22 +610,15 @@ const DashboardMonitoring = () => {
           </thead>
           <tbody>
             {topProducts.map((product) => {
-              const conversionRate = (
-                (product.conversions / product.views) *
-                100
-              ).toFixed(1);
+              const conversionRate = ((product.conversions / product.views) * 100).toFixed(1);
               return (
                 <tr
                   key={product.id}
                   onClick={() => trackEvent('Product', 'view', product.name, 1)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <td className={`${classes.td} ${classes.productName}`}>
-                    {product.name}
-                  </td>
-                  <td className={classes.td}>
-                    {product.views.toLocaleString('id-ID')}
-                  </td>
+                  <td className={`${classes.td} ${classes.productName}`}>{product.name}</td>
+                  <td className={classes.td}>{product.views.toLocaleString('id-ID')}</td>
                   <td className={classes.td}>{product.conversions}</td>
                   <td className={classes.td}>
                     <span
@@ -661,9 +633,7 @@ const DashboardMonitoring = () => {
                       {conversionRate}%
                     </span>
                   </td>
-                  <td className={classes.td}>
-                    Rp {product.revenue.toLocaleString('id-ID')}
-                  </td>
+                  <td className={classes.td}>Rp {product.revenue.toLocaleString('id-ID')}</td>
                 </tr>
               );
             })}
@@ -674,9 +644,7 @@ const DashboardMonitoring = () => {
       <div className={classes.tableCard}>
         <div className={classes.chartHeader}>
           <h3 className={classes.chartTitle}>Halaman Terpopuler</h3>
-          <p className={classes.chartSubtitle}>
-            Analisis performa halaman website
-          </p>
+          <p className={classes.chartSubtitle}>Analisis performa halaman website</p>
         </div>
         <table className={classes.table}>
           <thead className={classes.tableHeader}>
@@ -691,17 +659,11 @@ const DashboardMonitoring = () => {
             {topPages.map((page, index) => (
               <tr
                 key={index}
-                onClick={() =>
-                  trackEvent('Page', 'view', page.path, page.views)
-                }
+                onClick={() => trackEvent('Page', 'view', page.path, page.views)}
                 style={{ cursor: 'pointer' }}
               >
-                <td className={`${classes.td} ${classes.productName}`}>
-                  {page.path}
-                </td>
-                <td className={classes.td}>
-                  {page.views.toLocaleString('id-ID')}
-                </td>
+                <td className={`${classes.td} ${classes.productName}`}>{page.path}</td>
+                <td className={classes.td}>{page.views.toLocaleString('id-ID')}</td>
                 <td className={classes.td}>{page.avgTime}</td>
                 <td className={classes.td}>
                   <span

@@ -20,15 +20,15 @@
 
 ## 🚀 Tech Stack
 
-| Teknologi | Deskripsi |
-|-----------|-----------|
-| ⚛️ **React** | Library JavaScript untuk UI |
-| ⚡ **Vite** | Build tool super cepat |
-| 🎨 **React-JSS** | CSS-in-JS styling |
-| 🔄 **React Router** | Client-side routing |
-| 🔥 **React Hot Toast** | Notifikasi modern |
-| 📊 **Axios** | HTTP client |
-| 🔍 **LogRocket** | Session replay & monitoring |
+| Teknologi              | Deskripsi                   |
+| ---------------------- | --------------------------- |
+| ⚛️ **React**           | Library JavaScript untuk UI |
+| ⚡ **Vite**            | Build tool super cepat      |
+| 🎨 **React-JSS**       | CSS-in-JS styling           |
+| 🔄 **React Router**    | Client-side routing         |
+| 🔥 **React Hot Toast** | Notifikasi modern           |
+| 📊 **Axios**           | HTTP client                 |
+| 🔍 **LogRocket**       | Session replay & monitoring |
 
 ## ✨ Fitur Utama
 
@@ -98,40 +98,44 @@ frontend/
 ### Langkah-langkah
 
 1. **Clone Repository**
+
    ```bash
    git clone https://github.com/ravano-2464/Ravano-Shop-FE.git
    cd Ravano-Shop-FE
    ```
 
 2. **Install Dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Konfigurasi Environment**
-   
+
    Buat file `.env` di root folder:
+
    ```env
    VITE_API_BASE_URL=https://api.example.com
    ```
 
 4. **Jalankan Development Server**
+
    ```bash
    npm run dev
    ```
 
 5. **Buka Browser**
-   
+
    Akses aplikasi di `http://localhost:5173`
 
 ## 📜 Scripts
 
-| Script | Deskripsi |
-|--------|-----------|
-| `npm run dev` | Jalankan development server |
-| `npm run build` | Build untuk production |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Jalankan ESLint |
+| Script            | Deskripsi                   |
+| ----------------- | --------------------------- |
+| `npm run dev`     | Jalankan development server |
+| `npm run build`   | Build untuk production      |
+| `npm run preview` | Preview production build    |
+| `npm run lint`    | Jalankan ESLint             |
 
 ## 🤝 Kontribusi
 

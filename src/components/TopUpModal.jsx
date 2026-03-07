@@ -223,7 +223,7 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
             secondary: '#FEE2E2',
           },
           duration: 5000,
-        },
+        }
       );
       return;
     }
@@ -264,7 +264,7 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
             primary: '#DC2626',
             secondary: '#FEE2E2',
           },
-        },
+        }
       );
       return;
     }
@@ -279,11 +279,7 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
         },
       };
 
-      await axios.post(
-        `${BASE_URL}/manual-topup`,
-        { amount: parseInt(cleanAmount) },
-        config,
-      );
+      await axios.post(`${BASE_URL}/manual-topup`, { amount: parseInt(cleanAmount) }, config);
 
       toast.success(
         (t) => (
@@ -321,7 +317,7 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
             secondary: '#D1FAE5',
           },
           duration: 5000,
-        },
+        }
       );
       setAmount('');
       setLoading(false);
@@ -364,7 +360,7 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
             secondary: '#FEE2E2',
           },
           duration: 5000,
-        },
+        }
       );
       setLoading(false);
     }
@@ -408,7 +404,7 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
             secondary: '#FEE2E2',
           },
           duration: 5000,
-        },
+        }
       );
       return;
     }
@@ -449,7 +445,7 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
             primary: '#DC2626',
             secondary: '#FEE2E2',
           },
-        },
+        }
       );
       return;
     }
@@ -467,18 +463,14 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
       const { data } = await axios.post(
         `${BASE_URL}/topup`,
         { amount: parseInt(cleanAmount) },
-        config,
+        config
       );
 
       if (data && data.redirect_url) {
         toast.success(
           (t) => (
-            <div
-              style={{ display: 'flex', alignItems: 'center', width: '100%' }}
-            >
-              <span style={{ flex: 1 }}>
-                Mengalihkan ke halaman pembayaran...
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+              <span style={{ flex: 1 }}>Mengalihkan ke halaman pembayaran...</span>
               <button
                 onClick={() => toast.dismiss(t.id)}
                 style={{
@@ -509,7 +501,7 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
               secondary: '#DBEAFE',
             },
             duration: 5000,
-          },
+          }
         );
         window.open(data.redirect_url, '_blank');
 
@@ -521,10 +513,7 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
         throw new Error('Token pembayaran tidak valid');
       }
     } catch (error) {
-      const errorMsg =
-        error.response?.data?.error ||
-        error.message ||
-        'Gagal memproses transaksi';
+      const errorMsg = error.response?.data?.error || error.message || 'Gagal memproses transaksi';
       toast.error(
         (t) => (
           <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
@@ -559,7 +548,7 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
             secondary: '#FEE2E2',
           },
           duration: 5000,
-        },
+        }
       );
       setLoading(false);
     }
@@ -631,9 +620,8 @@ const TopUpModal = ({ isOpen, onClose, onSuccess }) => {
                   </button>
 
                   <div className={classes.devNote}>
-                    <strong>Mode Development:</strong> Jika Midtrans error,
-                    gunakan "Top Up Manual" untuk testing. Fitur ini akan
-                    dihapus di production.
+                    <strong>Mode Development:</strong> Jika Midtrans error, gunakan "Top Up Manual"
+                    untuk testing. Fitur ini akan dihapus di production.
                   </div>
                 </>
               )}

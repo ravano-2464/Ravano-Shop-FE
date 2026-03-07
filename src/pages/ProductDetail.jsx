@@ -341,9 +341,7 @@ const ProductDetail = () => {
     const toastId = toast.loading('Memproses transaksi...');
 
     try {
-      const cleanPrice = parseFloat(
-        String(productDetail.price).replace(/[^0-9]/g, ''),
-      );
+      const cleanPrice = parseFloat(String(productDetail.price).replace(/[^0-9]/g, ''));
       const payload = {
         items: [
           {
@@ -371,8 +369,7 @@ const ProductDetail = () => {
     }
   };
 
-  if (loading || !productDetail)
-    return <div className="p-10 text-center">{t.detail.loading}</div>;
+  if (loading || !productDetail) return <div className="p-10 text-center">{t.detail.loading}</div>;
 
   return (
     <div className={classes.page}>
@@ -380,9 +377,7 @@ const ProductDetail = () => {
         <div className={classes.visualSide}>
           <div
             className={`${classes.visibilityBadge} ${
-              productDetail.visibility === 'public'
-                ? classes.public
-                : classes.private
+              productDetail.visibility === 'public' ? classes.public : classes.private
             }`}
           >
             {productDetail.visibility === 'public' ? '🌐 Public' : '🔒 Private'}
@@ -413,9 +408,7 @@ const ProductDetail = () => {
           </div>
 
           <div className={classes.priceRow}>
-            <span className={classes.price}>
-              Rp {formatPrice(productDetail.price)}
-            </span>
+            <span className={classes.price}>Rp {formatPrice(productDetail.price)}</span>
             <span
               className={`${classes.stock} ${
                 productDetail.stock > 0 ? classes.inStock : classes.outOfStock
@@ -437,7 +430,12 @@ const ProductDetail = () => {
               onClick={handleAddToCart}
               disabled={productDetail.stock <= 0}
               className={`${classes.orderBtn} ${classes.btnCart}`}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+              }}
             >
               <ShoppingCart size={20} />
               Tambahkan ke Keranjang
@@ -446,18 +444,13 @@ const ProductDetail = () => {
               onClick={handleOrderClick}
               disabled={productDetail.stock <= 0}
               className={`${classes.orderBtn} ${
-                productDetail.stock > 0
-                  ? classes.btnEnabled
-                  : classes.btnDisabled
+                productDetail.stock > 0 ? classes.btnEnabled : classes.btnDisabled
               }`}
             >
               {productDetail.stock > 0 ? t.detail.buyBtn : t.list.outOfStock}
             </button>
             {isOwner && (
-              <Link
-                to={`/edit/products/${id}`}
-                className={classes.secondaryBtn}
-              >
+              <Link to={`/edit/products/${id}`} className={classes.secondaryBtn}>
                 {t.detail.editBtn}
               </Link>
             )}

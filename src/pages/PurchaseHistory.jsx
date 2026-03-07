@@ -254,9 +254,7 @@ const PurchaseHistory = () => {
   };
 
   const toggleExpand = (id) => {
-    setExpandedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
+    setExpandedIds((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]));
   };
 
   const formatDate = (dateString) => {
@@ -275,10 +273,7 @@ const PurchaseHistory = () => {
   };
 
   const totalSpent = transactions.reduce((acc, t) => acc + (t.totalAmount || 0), 0);
-  const totalItems = transactions.reduce(
-    (acc, t) => acc + (t.items?.length || 0),
-    0
-  );
+  const totalItems = transactions.reduce((acc, t) => acc + (t.items?.length || 0), 0);
 
   if (loading) {
     return (
@@ -300,9 +295,7 @@ const PurchaseHistory = () => {
             <ShoppingBag size={32} />
             {t.history.title}
           </h1>
-          <p className={classes.subtitle}>
-            {t.history.subtitle}
-          </p>
+          <p className={classes.subtitle}>{t.history.subtitle}</p>
         </div>
 
         <div className={classes.statsGrid}>
@@ -341,19 +334,14 @@ const PurchaseHistory = () => {
               <ShoppingBag size={40} />
             </div>
             <h3 className={classes.emptyTitle}>{t.history.noTransactions}</h3>
-            <p className={classes.emptyText}>
-              {t.history.noTransactionsDesc}
-            </p>
+            <p className={classes.emptyText}>{t.history.noTransactionsDesc}</p>
           </div>
         ) : (
           <div className={classes.transactionList}>
             {transactions.map((transaction) => {
               const isExpanded = expandedIds.includes(transaction._id || transaction.id);
               return (
-                <div
-                  key={transaction._id || transaction.id}
-                  className={classes.transactionCard}
-                >
+                <div key={transaction._id || transaction.id} className={classes.transactionCard}>
                   <div
                     className={classes.transactionHeader}
                     onClick={() => toggleExpand(transaction._id || transaction.id)}
@@ -388,12 +376,14 @@ const PurchaseHistory = () => {
                             src={item.product?.imageUrl || 'https://placehold.co/60?text=No+Image'}
                             alt={item.name}
                             className={classes.itemImage}
-                            onError={(e) => (e.target.src = 'https://placehold.co/60?text=No+Image')}
+                            onError={(e) =>
+                              (e.target.src = 'https://placehold.co/60?text=No+Image')
+                            }
                           />
                           <div className={classes.itemInfo}>
                             <div className={classes.itemName}>{item.name}</div>
                             <div className={classes.itemMeta}>
-                            {t.history.qty}: {item.quantity} × Rp {formatPrice(item.price)}
+                              {t.history.qty}: {item.quantity} × Rp {formatPrice(item.price)}
                             </div>
                           </div>
                           <div className={classes.itemPrice}>

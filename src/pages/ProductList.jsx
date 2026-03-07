@@ -352,9 +352,7 @@ const ProductList = () => {
     const toastId = toast.loading('Memproses transaksi...');
 
     try {
-      const cleanPrice = parseFloat(
-        String(selectedBuyProduct.price).replace(/[^0-9]/g, ''),
-      );
+      const cleanPrice = parseFloat(String(selectedBuyProduct.price).replace(/[^0-9]/g, ''));
       const payload = {
         items: [
           {
@@ -454,17 +452,9 @@ const ProductList = () => {
                 <div key={product.id || product._id} className={classes.card}>
                   <div className={classes.badgesContainer}>
                     {product.visibility === 'public' ? (
-                      <span
-                        className={`${classes.badge} ${classes.badgePublic}`}
-                      >
-                        🌐 Public
-                      </span>
+                      <span className={`${classes.badge} ${classes.badgePublic}`}>🌐 Public</span>
                     ) : (
-                      <span
-                        className={`${classes.badge} ${classes.badgePrivate}`}
-                      >
-                        🔒 Private
-                      </span>
+                      <span className={`${classes.badge} ${classes.badgePrivate}`}>🔒 Private</span>
                     )}
                     <span className={`${classes.badge} ${classes.badgeStock}`}>
                       📦 {formatThousand(product.stock)}
@@ -476,10 +466,7 @@ const ProductList = () => {
                       src={product.imageUrl}
                       alt={product.name}
                       className={classes.productImage}
-                      onError={(e) =>
-                        (e.target.src =
-                          'https://placehold.co/400?text=No+Image')
-                      }
+                      onError={(e) => (e.target.src = 'https://placehold.co/400?text=No+Image')}
                     />
                   </div>
                   <div className={classes.cardContent}>
@@ -491,9 +478,7 @@ const ProductList = () => {
                       <span>Created: {formatDate(product.created_at)}</span>
                       <span>Updated: {formatDate(product.updated_at)}</span>
                     </div>
-                    <div className={classes.productPrice}>
-                      Rp {formatThousand(product.price)}
-                    </div>
+                    <div className={classes.productPrice}>Rp {formatThousand(product.price)}</div>
                     <p className={classes.description}>
                       {product.description || 'No description available'}
                     </p>

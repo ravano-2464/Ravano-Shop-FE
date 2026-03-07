@@ -225,7 +225,7 @@ const CartModal = ({ isOpen, onClose, items = [], onRemove, onClearCart }) => {
   const total = useMemo(() => {
     return selectedItems.reduce(
       (acc, item) => acc + parsePrice(item.price) * (item.quantity || 1),
-      0,
+      0
     );
   }, [selectedItems]);
 
@@ -293,10 +293,7 @@ const CartModal = ({ isOpen, onClose, items = [], onRemove, onClearCart }) => {
           <div className={classes.body}>
             {items.length === 0 ? (
               <div className={classes.emptyState}>
-                <ShoppingBag
-                  size={48}
-                  style={{ marginBottom: '1rem', opacity: 0.5 }}
-                />
+                <ShoppingBag size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
                 <p>Keranjang Anda masih kosong</p>
               </div>
             ) : (
@@ -326,13 +323,8 @@ const CartModal = ({ isOpen, onClose, items = [], onRemove, onClearCart }) => {
                         </div>
                       </div>
                       <div className={classes.itemMeta}>
-                        <span className={classes.qtyBadge}>
-                          Qty: {item.quantity || 1}
-                        </span>
-                        <button
-                          className={classes.removeBtn}
-                          onClick={() => onRemove(itemId)}
-                        >
+                        <span className={classes.qtyBadge}>Qty: {item.quantity || 1}</span>
+                        <button className={classes.removeBtn} onClick={() => onRemove(itemId)}>
                           <Trash2 size={18} />
                         </button>
                       </div>

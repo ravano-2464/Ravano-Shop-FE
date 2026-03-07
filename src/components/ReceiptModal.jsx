@@ -93,12 +93,9 @@ const ReceiptModal = ({ transaction, onClose }) => {
           {transaction.items.map((item, idx) => (
             <div key={idx} className={classes.itemRow}>
               <span className={classes.itemName}>
-                {item.name}{' '}
-                <span style={{ color: '#6B7280' }}>x{item.quantity}</span>
+                {item.name} <span style={{ color: '#6B7280' }}>x{item.quantity}</span>
               </span>
-              <span>
-                Rp {(item.price * item.quantity).toLocaleString('id-ID')}
-              </span>
+              <span>Rp {(item.price * item.quantity).toLocaleString('id-ID')}</span>
             </div>
           ))}
         </div>
