@@ -13,7 +13,8 @@ const useStyles = createUseStyles({
   },
   container: {
     width: '100%',
-    maxWidth: '100%',
+    maxWidth: '1100px',
+    margin: '0 auto',
   },
   card: {
     backgroundColor: 'white',

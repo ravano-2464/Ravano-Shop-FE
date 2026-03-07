@@ -72,6 +72,7 @@ frontend/
 │   │   └── Products/
 │   ├── pages/          # Halaman aplikasi
 │   │   ├── Home.jsx
+│   │   ├── Profile.jsx
 │   │   ├── Login.jsx
 │   │   ├── Register.jsx
 │   │   ├── ProductList.jsx

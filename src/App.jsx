@@ -16,6 +16,7 @@ import ProductForm from './pages/ProductForm';
 import ProductEdit from './pages/ProductEdit';
 import ProductDetail from './pages/ProductDetail';
 import PurchaseHistory from './pages/PurchaseHistory';
+import Profile from './pages/Profile';
 import DashboardMonitoring from './pages/DashboardMonitoring';
 import NotFound from './pages/NotFound';
 
@@ -58,14 +59,15 @@ function App() {
             <Route path="/reset-password" element={<ResetPassword />} />
 
             <Route element={<ProtectedRoute />}>
-              <Route element={<Layout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/dashboard-monitoring" element={<DashboardMonitoring />} />
-                <Route path="/list-products" element={<ProductList />} />
-                <Route path="/add-products" element={<ProductForm />} />
-                <Route path="/edit/products/:id" element={<ProductEdit />} />
-                <Route path="/detail-products/:id" element={<ProductDetail />} />
-                <Route path="/purchase-history" element={<PurchaseHistory />} />
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path="dashboard-monitoring" element={<DashboardMonitoring />} />
+                <Route path="list-products" element={<ProductList />} />
+                <Route path="add-products" element={<ProductForm />} />
+                <Route path="edit/products/:id" element={<ProductEdit />} />
+                <Route path="detail-products/:id" element={<ProductDetail />} />
+                <Route path="purchase-history" element={<PurchaseHistory />} />
+                <Route path="profile" element={<Profile />} />
               </Route>
             </Route>
 

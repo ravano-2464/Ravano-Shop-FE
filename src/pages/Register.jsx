@@ -6,6 +6,18 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useLanguage } from '../context/LanguageContext';
 
+const maskEmail = (email = '') => {
+  if (!email || typeof email !== 'string') return 'N/A';
+
+  const normalized = email.toLowerCase().trim();
+  const [username, domain] = normalized.split('@');
+
+  if (!domain) return 'invalid-email-format';
+  if (username.length <= 2) return `${username[0] || '*'}***@${domain}`;
+
+  return `${username.slice(0, 2)}***@${domain}`;
+};
+
 const useStyles = createUseStyles({
   container: {
     minHeight: '100vh',
@@ -130,7 +142,19 @@ const Register = () => {
     setLoading(true);
 
     try {
-      await axios.post(`${BASE_URL}/auth/register`, formData);
+      console.log('[FE][AUTH][REGISTER][PAGE] Request', {
+        endpoint: `${BASE_URL}/auth/register`,
+        email: maskEmail(formData.email),
+        hasName: Boolean(formData.name),
+      });
+
+      const response = await axios.post(`${BASE_URL}/auth/register`, formData);
+
+      console.log('[FE][AUTH][REGISTER][PAGE] Success', {
+        status: response.status,
+        userId: response.data?._id,
+        email: maskEmail(response.data?.email),
+      });
 
       toast.success(
         (t) => (
@@ -171,6 +195,12 @@ const Register = () => {
 
       navigate('/login');
     } catch (error) {
+      console.error('[FE][AUTH][REGISTER][PAGE] Error', {
+        status: error?.response?.status,
+        data: error?.response?.data,
+        message: error?.message,
+      });
+
       const errorMsg = error.response?.data?.error || 'Gagal mendaftar';
       toast.error(
         (t) => (

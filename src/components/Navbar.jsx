@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
-import { ShoppingCart, Wallet, Plus, X, ChevronDown, LogOut } from 'lucide-react';
+import { ShoppingCart, Wallet, Plus, X, ChevronDown, ChevronUp, LogOut, User } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import useAuth from '../hooks/Auth/useAuth';
@@ -51,11 +51,14 @@ const useStyles = createUseStyles({
     '50%': { backgroundPosition: '100% center' },
     '100%': { backgroundPosition: '0% center' },
   },
-  navLinks: {
+  centerNavLinks: {
+    position: 'absolute',
+    left: '50%',
+    transform: 'translateX(-50%)',
     display: 'flex',
     gap: '1.5rem',
     alignItems: 'center',
-    '@media (max-width: 768px)': { display: 'none' },
+    '@media (max-width: 980px)': { display: 'none' },
   },
   navLink: {
     textDecoration: 'none',
@@ -84,6 +87,13 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     gap: '1rem',
   },
+  desktopActions: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '1rem',
+    marginLeft: 'auto',
+    '@media (max-width: 768px)': { display: 'none' },
+  },
   userDropdownContainer: {
     position: 'relative',
   },
@@ -92,7 +102,7 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     gap: '0.5rem',
     cursor: 'pointer',
-    padding: '0.5rem 1rem',
+    padding: '0.35rem 0.8rem 0.35rem 0.35rem',
     backgroundColor: '#F3F4F6',
     borderRadius: '2rem',
     border: 'none',
@@ -100,6 +110,27 @@ const useStyles = createUseStyles({
     '&:hover': {
       backgroundColor: '#E5E7EB',
     },
+  },
+  userAvatar: {
+    width: '34px',
+    height: '34px',
+    borderRadius: '50%',
+    backgroundColor: '#E0E7FF',
+    color: '#4338CA',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    fontWeight: '800',
+    fontSize: '0.75rem',
+    textTransform: 'uppercase',
+    flexShrink: 0,
+  },
+  userAvatarImage: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
   },
   userDropdownMenu: {
     position: 'absolute',
@@ -120,6 +151,7 @@ const useStyles = createUseStyles({
     display: 'flex',
     alignItems: 'center',
     gap: '0.75rem',
+    textDecoration: 'none',
     padding: '0.6rem 0.75rem',
     borderRadius: '0.5rem',
     cursor: 'pointer',
@@ -145,6 +177,13 @@ const useStyles = createUseStyles({
     fontSize: '0.9rem',
     color: '#374151',
     fontWeight: '600',
+  },
+  mobileUserInfo: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '0.75rem',
+    marginBottom: '0.5rem',
   },
   btn: {
     padding: '0.6rem 1.25rem',
@@ -274,9 +313,18 @@ const Navbar = () => {
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [balance, setBalance] = useState(0);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [avatarErrorUrl, setAvatarErrorUrl] = useState('');
   const dropdownRef = useRef(null);
 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const userInitials = (user?.name || 'User')
+    .split(' ')
+    .filter(Boolean)
+    .map((word) => word[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+  const hasAvatar = Boolean(user?.profileImageUrl) && avatarErrorUrl !== user?.profileImageUrl;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -394,6 +442,11 @@ const Navbar = () => {
     setIsLogoutModalOpen(true);
     if (isMobileOpen) setIsMobileOpen(false);
   };
+  const handleProfileClick = () => {
+    setIsUserDropdownOpen(false);
+    if (isMobileOpen) setIsMobileOpen(false);
+    navigate('/profile');
+  };
 
   const navItems = [
     { label: t.nav.home, path: '/' },
@@ -401,6 +454,9 @@ const Navbar = () => {
     { label: t.nav.add, path: '/add-products' },
     { label: 'Riwayat', path: '/purchase-history' },
   ];
+  const centeredNavItems = navItems.filter((item) =>
+    ['/list-products', '/add-products', '/purchase-history'].includes(item.path)
+  );
 
   return (
     <>
@@ -410,8 +466,8 @@ const Navbar = () => {
           <span className={classes.brandText}>Ravano Shop</span>
         </Link>
 
-        <div className={classes.navLinks}>
-          {navItems.map((item) => (
+        <div className={classes.centerNavLinks}>
+          {centeredNavItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
@@ -420,7 +476,9 @@ const Navbar = () => {
               {item.label}
             </Link>
           ))}
+        </div>
 
+        <div className={classes.desktopActions}>
           {user && (
             <button
               className={classes.walletBtn}
@@ -457,16 +515,40 @@ const Navbar = () => {
               <div className={classes.userDropdownContainer} ref={dropdownRef}>
                 <button
                   className={classes.userDropdownTrigger}
-                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  onClick={() => setIsUserDropdownOpen((prev) => !prev)}
                 >
+                  <div className={classes.userAvatar}>
+                    {hasAvatar ? (
+                      <img
+                        src={user.profileImageUrl}
+                        alt={user.name}
+                        className={classes.userAvatarImage}
+                        onError={() => setAvatarErrorUrl(user.profileImageUrl || '')}
+                      />
+                    ) : (
+                      userInitials
+                    )}
+                  </div>
                   <span className={classes.userBadge}>
                     {t.nav.greeting}, {user.name}
                   </span>
-                  <ChevronDown size={16} color="#6B7280" />
+                  {isUserDropdownOpen ? (
+                    <ChevronUp size={16} color="#6B7280" />
+                  ) : (
+                    <ChevronDown size={16} color="#6B7280" />
+                  )}
                 </button>
 
                 {isUserDropdownOpen && (
                   <div className={classes.userDropdownMenu}>
+                    <button
+                      type="button"
+                      className={classes.dropdownItem}
+                      onClick={handleProfileClick}
+                    >
+                      <User size={16} />
+                      {t.nav.profile}
+                    </button>
                     <button
                       onClick={handleLogoutClick}
                       className={`${classes.dropdownItem} ${classes.dropdownItemLogout}`}
@@ -579,12 +661,36 @@ const Navbar = () => {
 
           {user ? (
             <>
-              <div
-                className={classes.userBadge}
-                style={{ textAlign: 'center', marginBottom: '0.5rem' }}
-              >
-                {t.nav.greeting}, {user.name}
+              <div className={classes.mobileUserInfo}>
+                <div className={classes.userAvatar}>
+                  {hasAvatar ? (
+                    <img
+                      src={user.profileImageUrl}
+                      alt={user.name}
+                      className={classes.userAvatarImage}
+                      onError={() => setAvatarErrorUrl(user.profileImageUrl || '')}
+                    />
+                  ) : (
+                    userInitials
+                  )}
+                </div>
+                <div className={classes.userBadge}>
+                  {t.nav.greeting}, {user.name}
+                </div>
               </div>
+              <button
+                type="button"
+                onClick={handleProfileClick}
+                className={classes.dropdownItem}
+                style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  border: '1px solid #E5E7EB',
+                }}
+              >
+                <User size={16} />
+                {t.nav.profile}
+              </button>
               <button
                 onClick={handleLogoutClick}
                 className={`${classes.btn} ${classes.btnLogout}`}
