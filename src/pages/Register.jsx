@@ -12,7 +12,8 @@ const useStyles = createUseStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F3F4F6',
+    background:
+      'radial-gradient(circle at top left, rgba(132, 204, 22, 0.18), transparent 40%), radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.2), transparent 45%), linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%)',
     padding: '1rem',
   },
   card: {

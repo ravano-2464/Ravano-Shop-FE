@@ -80,6 +80,8 @@ frontend/
 │   │   ├── ProductEdit.jsx
 │   │   ├── PurchaseHistory.jsx
 │   │   ├── DashboardMonitoring.jsx
+│   │   ├── ForgotPassword.jsx
+│   │   ├── ResetPassword.jsx
 │   │   └── NotFound.jsx
 │   ├── App.jsx         # Root component
 │   └── main.jsx        # Entry point

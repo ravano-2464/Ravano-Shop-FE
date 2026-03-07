@@ -20,7 +20,8 @@ const useStyles = createUseStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f3f4f6',
+    background:
+      'radial-gradient(circle at top left, rgba(132, 204, 22, 0.18), transparent 40%), radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.2), transparent 45%), linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%)',
     padding: '1rem',
   },
   card: {
@@ -83,6 +84,11 @@ const useStyles = createUseStyles({
       opacity: 0.7,
       cursor: 'not-allowed',
     },
+  },
+  auxRow: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginTop: '-0.75rem',
   },
   footer: {
     marginTop: '2rem',
@@ -209,6 +215,11 @@ const Login = () => {
               onChange={handleChange}
               placeholder="••••••••"
             />
+          </div>
+          <div className={classes.auxRow}>
+            <Link to="/forgot-password" className={classes.link}>
+              {t.auth.forgotPasswordLink}
+            </Link>
           </div>
           <button type="submit" className={classes.button} disabled={isSubmitting}>
             {isSubmitting ? t.auth.signingInBtn : t.auth.signInBtn}
