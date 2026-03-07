@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { X, Plus, Minus, ShoppingCart } from 'lucide-react';
 
@@ -136,11 +136,21 @@ const useStyles = createUseStyles({
     },
   },
   quantityDisplay: {
-    fontSize: '2rem',
-    fontWeight: '700',
+    width: '100px',
+    height: '48px',
+    borderRadius: '0.75rem',
+    border: '2px solid #E5E7EB',
+    backgroundColor: 'white',
     color: '#111827',
-    minWidth: '80px',
+    fontSize: '1.4rem',
+    fontWeight: '700',
     textAlign: 'center',
+    outline: 'none',
+    transition: 'border-color 0.2s, box-shadow 0.2s',
+    '&:focus': {
+      borderColor: '#4F46E5',
+      boxShadow: '0 0 0 3px rgba(79, 70, 229, 0.12)',
+    },
   },
   totalSection: {
     backgroundColor: '#F9FAFB',
@@ -200,38 +210,77 @@ const useStyles = createUseStyles({
 
 const QuantityModal = ({ isOpen, onClose, product, onConfirm }) => {
   const classes = useStyles();
-  const [quantity, setQuantity] = useState(1);
-
-  if (!isOpen || !product) return null;
+  const [quantityInput, setQuantityInput] = useState('1');
 
   const formatPrice = (price) => {
     const cleanPrice = parseFloat(String(price).replace(/[^0-9]/g, ''));
     return isNaN(cleanPrice) ? 0 : cleanPrice;
   };
 
-  const price = formatPrice(product.price);
+  const price = formatPrice(product?.price);
+  const maxStock = parseInt(product?.stock, 10) || 0;
+  const parsedQuantity = parseInt(quantityInput, 10);
+  const quantity = Number.isNaN(parsedQuantity) ? 0 : parsedQuantity;
   const total = price * quantity;
-  const maxStock = product.stock || 0;
+
+  useEffect(() => {
+    if (isOpen) {
+      setQuantityInput('1');
+    }
+  }, [isOpen, product?.id, product?._id]);
+
+  if (!isOpen || !product) return null;
 
   const handleIncrease = () => {
     if (quantity < maxStock) {
-      setQuantity(quantity + 1);
+      setQuantityInput(String(quantity + 1));
     }
   };
 
   const handleDecrease = () => {
     if (quantity > 1) {
-      setQuantity(quantity - 1);
+      setQuantityInput(String(quantity - 1));
     }
   };
 
+  const handleQuantityChange = (e) => {
+    const rawValue = e.target.value.replace(/\D/g, '');
+
+    if (rawValue === '') {
+      setQuantityInput('');
+      return;
+    }
+
+    const nextValue = Math.min(parseInt(rawValue, 10), maxStock);
+    setQuantityInput(String(nextValue));
+  };
+
+  const handleQuantityBlur = () => {
+    if (maxStock <= 0) {
+      setQuantityInput('0');
+      return;
+    }
+
+    if (quantityInput === '') {
+      setQuantityInput('1');
+      return;
+    }
+
+    const nextValue = parseInt(quantityInput, 10);
+    const normalizedValue = Number.isNaN(nextValue) ? 1 : Math.min(Math.max(nextValue, 1), maxStock);
+    setQuantityInput(String(normalizedValue));
+  };
+
   const handleConfirm = () => {
-    onConfirm(quantity);
-    setQuantity(1);
+    const finalQuantity = Math.min(Math.max(quantity, 1), maxStock);
+    if (finalQuantity < 1 || finalQuantity > maxStock) return;
+
+    onConfirm(finalQuantity);
+    setQuantityInput('1');
   };
 
   const handleClose = () => {
-    setQuantity(1);
+    setQuantityInput('1');
     onClose();
   };
 
@@ -273,7 +322,17 @@ const QuantityModal = ({ isOpen, onClose, product, onConfirm }) => {
               >
                 <Minus size={20} />
               </button>
-              <div className={classes.quantityDisplay}>{quantity}</div>
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                className={classes.quantityDisplay}
+                value={quantityInput}
+                onChange={handleQuantityChange}
+                onBlur={handleQuantityBlur}
+                placeholder="1"
+                aria-label="Jumlah pembelian"
+              />
               <button
                 className={classes.quantityBtn}
                 onClick={handleIncrease}
@@ -302,7 +361,7 @@ const QuantityModal = ({ isOpen, onClose, product, onConfirm }) => {
           <button
             className={classes.submitBtn}
             onClick={handleConfirm}
-            disabled={quantity < 1 || quantity > maxStock}
+            disabled={quantity < 1 || quantity > maxStock || maxStock <= 0}
           >
             Beli Sekarang
           </button>
