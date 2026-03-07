@@ -143,7 +143,6 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, d
 
   if (!isOpen) return null;
 
-  // Helper untuk format harga
   const formatPrice = (price) => {
     return price ? parseInt(String(price).replace(/\D/g, '') || 0).toLocaleString('id-ID') : '0';
   };
